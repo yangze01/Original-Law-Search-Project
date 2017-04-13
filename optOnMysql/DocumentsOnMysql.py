@@ -11,7 +11,7 @@ class DocumentsOnMysql(object):
         self.opt_OnMySql = OptOnMysql()
 
     def findById(self,id):
-        cur = self.opt_OnMySql.exeQuery("select * from document where _id = '" + 'id' + "'")
+        cur = self.opt_OnMySql.exeQuery("select * from document where _id = '%d'" %id)
         it = cur.fetchone()
         # print(it)
         # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -19,8 +19,17 @@ class DocumentsOnMysql(object):
             # print("there is nothing found")
             return 0
         else:
-            print(it)
+            # print(it[5])
+            print('\n       '.join(it[5].split('|')))
             return 1
+    def findbycriminal(self, crim):
+        cur = self.opt_OnMySql.exeQuery("select * from document where criminal = '%s'" %crim)
+        it = cur.fetchall()
+        if it == None:
+            print("No data for %s" %crim)
+        else:
+            print("return data")
+            return it
 
     def findall(self):
         cur = self.opt_OnMySql.exeQuery("select * from document")
@@ -93,10 +102,14 @@ if __name__ == "__main__":
 
     # print(document_unit)
     opt = DocumentsOnMysql()
-    opt.insertOneDocuments(document_unit)
-    # print(opt)
-    # opt.findById("1")
-    # a = opt.findall()
-    # for i in a :
-        # print(i)
+    # opt.insertOneDocuments(document_unit)
+    #
+    it = opt.findbycriminal(u"抢劫罪")
+    print(len(it))
+    # for i in it[0:5]:
+    #     print('\n'.join(i[5].split('|')))
+        # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     opt.connClose()
+    # it = opt.findall()
+    # print(len(it[0]))
+    # opt.findById(2005)

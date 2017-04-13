@@ -46,9 +46,6 @@ def read_more_raw_document_list(filepath_list):
         document_list += document
     return document_list
 
-
-
-
 def read_document(file_path):
     return_document = list()
     # i = 0
