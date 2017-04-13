@@ -12,7 +12,7 @@ BasePath = sys.path[0]
 def make_dictionary(seg_corpus):
     '''
     :param seg_corpus: 分好词的文本数据
-    :return:
+    :return: 建立的词典
     '''
     dictionary_file = BasePath + "/data/dict.pickle"
     if os.path.exists(dictionary_file):
@@ -42,6 +42,11 @@ def make_lda(bag_of_words_corpus, _dictionary, _nums_topic = 100):
     return lda_model
 
 def corpus_tfidf(dictionary, document_list):
+    '''
+    :param dictionary: 语料词典
+    :param document_list: 分好词的语料
+    :return: 语料的tfidf值，以语料建立的tfidf模型
+    '''
     corpus = [dictionary.doc2bow(text) for text in document_list]
     tfidf = models.TfidfModel(corpus)
     corpus_tfidf_value = tfidf[corpus]
@@ -58,6 +63,20 @@ def sim_D2N(lda_model, dictionary, test_content, tfidf_model, corpus_tfidf_value
     sort_sims = sorted(enumerate(sims), key=lambda item: -item[1])
     return sort_sims
 
+def get_top10_sim_intersection(content_sims, result_sims):
+    final_top10_sim = list()
+    for tuple1 in content_sims:
+        for tuple2 in result_sims:
+
+            if(tuple1[0] == tuple2[0]):
+                sum = 0.4 * tuple1[1] + 0.6 * tuple2[1]
+                final_top10_sim.append((tuple1[0],sum))
+
+    if(final_top10_sim == []):
+        print("no intersection")
+        return content_sims
+    else:
+        return sorted(final_top10_sim, key=lambda t: t[1], reverse=True)
 
 
 
