@@ -16,7 +16,6 @@ def is_valid_date(str):
     return False
 
 def document_format(line, criminal):
-
     line = json.loads(line.decode('utf8'))
     document_unit = dict()
     document_unit["title"] = line['title']

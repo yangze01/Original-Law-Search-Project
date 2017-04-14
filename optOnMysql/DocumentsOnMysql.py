@@ -22,7 +22,13 @@ class DocumentsOnMysql(object):
             # print(it[5])
             print('\n       '.join(it[5].split('|')))
             return 1
+
+
     def findbycriminal(self, crim):
+        '''
+        :param crim: 罪名
+        :return: criminal cursor of data
+        '''
         cur = self.opt_OnMySql.exeQuery("select * from document where criminal = '%s'" %crim)
         it = cur.fetchall()
         if it == None:
@@ -30,6 +36,12 @@ class DocumentsOnMysql(object):
         else:
             print("return data")
             return it
+
+
+
+
+
+
 
     def findall(self):
         cur = self.opt_OnMySql.exeQuery("select * from document")
@@ -102,13 +114,15 @@ if __name__ == "__main__":
 
     # print(document_unit)
     opt = DocumentsOnMysql()
+
     # opt.insertOneDocuments(document_unit)
-    #
     it = opt.findbycriminal(u"抢劫罪")
     print(len(it))
+
     # for i in it[0:5]:
     #     print('\n'.join(i[5].split('|')))
         # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
     opt.connClose()
     # it = opt.findall()
     # print(len(it[0]))

@@ -36,7 +36,7 @@ def get_result(document):
             return_str = search_result.group()
         else:
             return_str = ""
-    return return_str
+    return return_str #
 
 def get_details(document):
     pattern_details = re.compile(u".*?(上述事实)")
