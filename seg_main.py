@@ -29,8 +29,8 @@ def content_result(myseg, document):
     else:
         content_wordlist = myseg.paraph2word(document)
         result_wordlist = []
-
     return content_wordlist, result_wordlist
+
 
 def content_resultforword2vec(myseg, document):
     judge_pattern = re.compile(u"(.*)((判决如下|裁定如下|判处如下|判决)(.*))")
@@ -120,10 +120,10 @@ if __name__ == "__main__":
                      u"电信诈骗罪",
                      u"拐卖妇女儿童罪"]
 
-#
     opt = DocumentsOnMysql()
     doucment_id_list, document_list = get_criminal_data(opt, criminal_list[6])
     content_list, result_list = seg_document(document_list)
+    # content_list, result_list = seg_documentforword2vec(document_list)
     print(len(content_list))
     save_seg_document(content_list, result_list, 7)
 
@@ -135,5 +135,10 @@ if __name__ == "__main__":
     #     i += 1
     # document_list = read_document(filepath_list[3])
 
-    # content_list, result_list = seg_documentforword2vec(document_list)
+
+
+
+
+
+
 

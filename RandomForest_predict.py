@@ -138,15 +138,6 @@ if __name__ == "__main__":
     print("sim matrix")
     print(rf_similarity(path_of_randomforest.toarray()))
 
-#
-
-
-
-
-
-
-
-
 
 
 
