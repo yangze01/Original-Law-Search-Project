@@ -1,5 +1,6 @@
 # coding=utf8
 from Segment.MySegment import *
+from optOnMysql.DocumentsOnMysql import *
 import json
 import sys
 reload(sys)
@@ -20,6 +21,35 @@ def fetch_all_content_result(document_list):
     print(i)
     myseg.close()
     return content_all_list, result_all_list
+
+def get_criminal_list_data(opt_Documents, criminal_list):
+    document_id_list = list()
+    document_list = list()
+    for crim in criminal_list:
+        crim_id_list, crim_document_list = get_criminal_data(opt_Documents, crim)
+        document_id_list += crim_id_list
+        document_list += crim_document_list
+    return document_id_list, document_list
+
+def get_criminal_data(opt_Documents, crim):
+    '''
+    :param crim: 罪名
+    :return: document_id_list, document_list
+    '''
+
+    document_id_list = list()
+    document_list = list()
+    print("in get_criminal %s"%crim)
+    iter = opt_Documents.findbycriminal(crim)
+    print("in segment")
+    for it in iter:
+        document_id_list.append(it[0])
+        document_list.append(it[5])
+
+    return document_id_list, document_list
+
+
+
 
 def read_more_document(filepath_list):
 
@@ -116,6 +146,9 @@ def read_seg_document_list(file_path_list):
         print("the read document size")
         print(len(document_list),len(y))
     return all_document_list, label
+
+
+
 
 if __name__ == "__main__":
 

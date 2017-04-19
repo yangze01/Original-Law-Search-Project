@@ -5,6 +5,7 @@ from data_helper import *
 import logging
 import gensim
 import datetime
+from optOnMysql.DocumentsOnMysql import *
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 import sys
 BasePath = sys.path[0]
@@ -78,7 +79,106 @@ def get_top10_sim_intersection(content_sims, result_sims):
     else:
         return sorted(final_top10_sim, key=lambda t: t[1], reverse=True)
 
+def get_sim_seg_sentence(seg_sentence, use_content):
+    content_dictionary = make_dictionary(use_content)
+    content_corpus_tfidf, tfidf_content = corpus_tfidf(content_dictionary, use_content)
+    content_lda_model = make_lda(content_corpus_tfidf, content_dictionary, _nums_topic = 100)
+    print("----------------------- 数据加载完毕 -----------------------")
+    test_content = seg_sentence.decode('utf8').split()
+    content_sims = sim_D2N(content_lda_model, content_dictionary, test_content, tfidf_content, content_corpus_tfidf)
+    top10_sort_sim_content = content_sims[0:10]
+
+    j = 1
+    document_index_list = [result_tuple[0] for result_tuple in top10_sort_sim_content]
+    # for result_tuple in top10_sort_sim_content:
+        # print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
+        # print(document_list[result_tuple[0]])
+    return document_index_list
+
+def get_sim_sentence(sentence, use_content):
+    '''
+    :param sentence:#
+    :param use_content:
+    :return:
+    '''
+    myseg = MySegment()
+    content_dictionary = make_dictionary(use_content)
+    content_corpus_tfidf, tfidf_content = corpus_tfidf(content_dictionary, use_content)
+    content_lda_model = make_lda(content_corpus_tfidf, content_dictionary, _nums_topic = 100)
+    print("----------------------- 数据加载完毕 -----------------------")
+    test_content = ' '.join(myseg.sen2word(sentence)).decode('utf8').split()
+    myseg.close()
+    content_sims = sim_D2N(content_lda_model, content_dictionary, test_content, tfidf_content, content_corpus_tfidf)
+    top10_sort_sim_content = content_sims[0:10]
+    document_index_list = [result_tuple[0] for result_tuple in top10_sort_sim_content]
+    return document_index_list
+
+
 
 
 if __name__ == "__main__":
+    file_path = BasePath + "/data/judgment_kill.txt"
+    print("----------------------- 加载数据中，请等待..... -----------------------")
+    opt_Document = DocumentsOnMysql()
+    document_all_id_list, document_list = get_criminal_data(opt_Document, u'故意杀人罪')
+
+    content_all_list, result_all_list = fetch_all_content_result(document_list)
+    # test_content = content_all_list[-1]
+    use_content = content_all_list # [:-1]
     print(1)
+    print("请输入查询方式，整句查询请按1，关键词查询请按2： ")
+    i = input()
+    while True:
+        if(i == 1):
+            print("请输入一句话，回车结束： ")
+            sentence = raw_input()
+            document_index_list = get_sim_sentence(sentence, use_content)
+        else:
+            print("请输入关键词，以空格隔开，回车结束")
+            seg_sentence = raw_input()
+            document_index_list = get_sim_sentence(seg_sentence, use_content)
+        document_id_list = [document_all_id_list[document_index] for document_index in document_index_list]
+        print("document index list is : ", document_index_list)
+        print("document id list is : ", document_id_list)
+        j = 1
+        for document_index in document_index_list:
+            print("----------------------- 第"+ str(j) + "名匹配文档： -----------------------")
+            print(document_list[document_index])
+            j += 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
