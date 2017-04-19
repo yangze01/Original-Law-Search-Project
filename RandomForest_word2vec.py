@@ -187,7 +187,7 @@ def get_sim_sentence(clf_model, seg_sentence, x_sample):
     # document_index_ret = get_clf_sim(clf_model, seg_sentence_vec, x_sample, topn_candidate_index)
 
 
-    # print(document_index_ret)
+    # print(document_index_ret) #
 
     # return document_index_ret
     # print(len(vec_sim))
