@@ -104,7 +104,7 @@ def content_result(myseg, document):
 
 def seg_document(document_list):
     content_list = []
-    result_list = []
+    result_list = []#
 
     myseg = MySegment()
     i = 0

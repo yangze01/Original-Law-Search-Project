@@ -79,7 +79,7 @@ def get_top10_sim_intersection(content_sims, result_sims):
     else:
         return sorted(final_top10_sim, key=lambda t: t[1], reverse=True)
 
-def get_sim_seg_sentence(seg_sentence, use_content):
+def get_sim_seg_sentence(seg_sentence, use_content): #
     content_dictionary = make_dictionary(use_content)
     content_corpus_tfidf, tfidf_content = corpus_tfidf(content_dictionary, use_content)
     content_lda_model = make_lda(content_corpus_tfidf, content_dictionary, _nums_topic = 100)

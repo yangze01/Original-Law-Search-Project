@@ -122,7 +122,7 @@ if __name__ == "__main__":
                      u"拐卖妇女儿童罪"]
 
 
-    opt = DocumentsOnMysql()
+    opt = DocumentsOnMysql() #
     doucment_id_list, document_list = get_criminal_data(opt, criminal_list[0])
     content_list, result_list = seg_document(document_list)
     print(len(content_list))

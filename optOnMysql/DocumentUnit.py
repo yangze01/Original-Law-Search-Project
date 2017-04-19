@@ -14,7 +14,7 @@ class DocumentsUnit(object):
             "content":"",
             "criminal":"",
             "date":""
-        }
+        }#
 if __name__ == "__main__":
     document_unit = dict()
     # document_unit["_id"] = 2

@@ -14,7 +14,7 @@ class DocumentsOnMysql(object):
         cur = self.opt_OnMySql.exeQuery("select * from document where _id = '%d'" %id)
         it = cur.fetchone()
         # print(it)
-        # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")#
         if it == None:
             # print("there is nothing found")
             return 0

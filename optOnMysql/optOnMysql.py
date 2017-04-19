@@ -22,7 +22,7 @@ class OptOnMysql(object):
         sta = self.cur.execute(sql)
         self.conn.commit()
         return (sta)
-
+#
     def exeDeleteById(self,sql,ID):
         sta = 0
         sta = self.cur.execute(sql%(int(ID)))

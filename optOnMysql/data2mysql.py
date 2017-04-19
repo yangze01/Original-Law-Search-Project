@@ -13,7 +13,7 @@ def is_valid_date(str):
     time.strptime(str, "%Y-%m-%d")
     return True
   except:
-    return False
+    return False#
 
 def document_format(line, criminal):
     line = json.loads(line.decode('utf8'))

@@ -17,7 +17,7 @@ def get_body(document):
 def get_behavior(document):
     # pattern_behavior = re.compile(u"(本院认为).*?\。")
     pattern_behavior = re.compile(u"(本院认为).*(依照)")
-    search_result = re.search(pattern_behavior, document)
+    search_result = re.search(pattern_behavior, document) #
     if search_result:
         return_str = search_result.group()
     else:

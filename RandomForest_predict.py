@@ -142,7 +142,7 @@ if __name__ == "__main__":
     # print("path of randomforest")
     # print(path_of_randomforest.toarray())
     print("sim matrix")
-    print(rf_similarity(path_of_randomforest.toarray()))
+    print(rf_similarity(path_of_randomforest.toarray())) #
 
 
 

@@ -31,7 +31,7 @@ d = np.array([[1, 0, 1, 0, 1],
               [0, 1, 1, 0, 1]])
 
 # print(d[index])
-
+ #
 print(np.sum(c & d, axis=1))
 num_path = np.sum(c & d, axis=1) / float(np.sum(c & c))
 # # print()

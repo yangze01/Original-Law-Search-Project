@@ -231,7 +231,7 @@ if __name__ == "__main__":
 
 
     print("请输入查询方式，整句查询请按1，关键词查询请按2： ")
-    i = input()
+    i = input()#
     while True:
         if(i == 1):
             print("请输入一句话，回车结束： ")
