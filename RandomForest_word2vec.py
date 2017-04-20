@@ -293,15 +293,15 @@ if __name__ == "__main__":
 
 
 
-    # num_topics = 100
-    # dev_sample_percentage = .2
-    # filepath_list = [BasePath + "/data/judgment" + str(i) + "word_from_mysql" + ".txt" for i in range(1,8)]
-    # x_data,y_data = read_seg_document_list(filepath_list)
+    num_topics = 100
+    dev_sample_percentage = .2
+    filepath_list = [BasePath + "/data/judgment" + str(i) + "word_from_mysql" + ".txt" for i in range(1,8)]
+    x_data,y_data = read_seg_document_list(filepath_list)
     #
     # corpus2word2vec(x_data)
     #
-    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v.txt")
-    # x_sample = Imputer().fit_transform(x_sample)
+    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v.txt")
+    x_sample = Imputer().fit_transform(x_sample)
     # y_sample = np.array(y_data)
     # x_train, x_test, y_train, y_test = dev_sample(x_sample, y_sample, dev_sample_percentage)
     # print("data loaded finished.")
