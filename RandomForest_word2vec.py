@@ -181,7 +181,7 @@ def get_candidate(topn, query_vec, corpus_vec):
     return topn_candidate, vec_sim[topn_candidate]
 
 def get_clf_sim(clf_model, seg_sentence_vec, candidate_vec, topn_candidate_index):
-    print("the candidate_vec len is : ".format(len(candidate_vec)))
+    print("the candidate_vec len is : {}".format(len(candidate_vec)))
 
     path_of_sample, _ = clf.decision_path(candidate_vec[topn_candidate_index])
     path_of_seg_sentence, _ = clf.decision_path(seg_sentence_vec)
