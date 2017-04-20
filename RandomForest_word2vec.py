@@ -103,31 +103,51 @@ def make_word2id(corpus):
     f_word_id.close()
 
 
-def sentence2vec(model, sentence, randomvec = None):
+def sentence2vec(model, sentence, randomvec = None, vec_type = "minmax"):
+    # print(vec_type)
     if randomvec == None:
-        randomvec = np.random.normal(size = 300)
+        randomvec = np.random.normal(size = 100)
     len_word = len(set(sentence))
-    tmp_num = np.zeros(300)
-    for word in set(sentence):
-        try:
-            tmp_num += model[word.decode('utf8')]
-        except:
-            # print("w2v_model does not have the word.")
+    tmp_num = np.zeros(100)
+    if vec_type == "average":
+        for word in set(sentence):
+            try:
+                tmp_num += model[word.decode('utf8')]
+            except:
+                tmp_num += randomvec
+        tmp_num = tmp_num / len_word
+
+        print(tmp_num.shape)
+
+    elif vec_type == "minmax":
+        # print("in minmax")
+        for word in set(sentence):
+            try:
+                tmp_num = np.vstack((tmp_num, model[word.decode('utf8')]))
+            except:
+                tmp_num = np.vstack((tmp_num, randomvec))
             # print(tmp_num)
-            # print(randomvec)
-            tmp_num += randomvec
-    tmp_num = tmp_num/len_word
+        tmp_num = np.hstack((np.min(tmp_num, axis = 0), np.max(tmp_num, axis = 0)))
+        # print(tmp_num.shape)
+        # print(tmp_num.shape)
+        # print(tmp_num)
+    # print(len(tmp_num))
+    if(len_word == 0):
+        return np.zeros(200)
     return tmp_num
 
-def sentences2docvec(model, sentences):
-    # f = open(BasePath + "/word2vec_model/corpus_w2v.txt", "w")
+def sentences2docvec(model, sentences, vec_type = "minmax"):
+
     i = 0
-    random_vector = np.random.normal(size = 300)
+    random_vector = np.random.normal(size = 100)
     corpus_vec = list()
     for sentence in sentences:
-        tmp_num = sentence2vec(model, sentence, random_vector)
+        if (i == 2658):
+            print(1)
+        tmp_num = sentence2vec(model, sentence, random_vector, vec_type)
         # len_word = len(set(sentence))
         print(i)
+
         # tmp_num = np.zeros(300)
         # for word in set(sentence):
         #     try:
@@ -137,7 +157,11 @@ def sentences2docvec(model, sentences):
         # tmp_num = tmp_num/len_word
         corpus_vec.append(tmp_num)
         i = i + 1
-    np.savetxt(BasePath + "/word2vec_model/corpus_w2v.txt", np.array(corpus_vec))
+    # fmt = "%f, "*599+"%f"
+    print(type(np.array(corpus_vec, dtype=object)))
+    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt", np.array(corpus_vec))
+
+    # np.array(corpus_vec).tofile(BasePath + "/word2vec_model/corpus_w2v_minmax.txt")
     # f.close()
 
 def load_model():
@@ -153,14 +177,18 @@ def corpus2word2vec(x_data):
 def get_candidate(topn, query_vec, corpus_vec):
     vec_sim = np.dot(query_vec, corpus_vec.T)  / (np.linalg.norm(corpus_vec, axis = 1) * np.linalg.norm(query_vec))
     topn_candidate = heapq.nlargest(topn, range(len(vec_sim)), vec_sim.take)
+    print("topn_candidate index from corpus_vec is : {}".format(topn_candidate))
     return topn_candidate, vec_sim[topn_candidate]
 
 def get_clf_sim(clf_model, seg_sentence_vec, candidate_vec, topn_candidate_index):
+    print("the candidate_vec len is : ".format(len(candidate_vec)))
+
     path_of_sample, _ = clf.decision_path(candidate_vec[topn_candidate_index])
     path_of_seg_sentence, _ = clf.decision_path(seg_sentence_vec)
     seg_sentence_array = path_of_seg_sentence.toarray()
     sample_array = path_of_sample.toarray()
     clf_sim = np.sum(seg_sentence_array & sample_array, axis=1) / float(np.sum(seg_sentence_array & seg_sentence_array))
+
     top_clf_index = heapq.nlargest(10, range(len(clf_sim)), clf_sim.take)
     # return np.array(topn_candidate_index)[top_clf_index]
     return top_clf_index, clf_sim
@@ -173,31 +201,18 @@ def get_sim_sentence(clf_model, seg_sentence, x_sample):
     # vec_sim = np.dot(seg_sentence_vec, x_sample.T) / (np.linalg.norm(x_sample, axis=1) * np.linalg.norm(seg_sentence_vec))
     topn_candidate_index, candidate_vec_sim = get_candidate(300, seg_sentence_vec, x_sample)
     # print(topn_candidate_index)
-
     top_clf_index, clf_sim = get_clf_sim(clf_model, seg_sentence_vec, x_sample, topn_candidate_index)
 
-    # document_ret_tuple = (np.array(topn_candidate_index)[top_clf_index], clf_sim[top_clf_index], candidate_vec_sim[top_clf_index])
-
     document_ret_tuple = [(topn_candidate_index[i], clf_sim[i], candidate_vec_sim[i]) for i in top_clf_index]
-    # print(document_ret_tuple[0])
-    # print(document_ret_tuple[1])
-    # print(document_ret_tuple[2])
+
     for i in document_ret_tuple:
         print(i)
     return document_ret_tuple
-    # document_index_ret = get_clf_sim(clf_model, seg_sentence_vec, x_sample, topn_candidate_index)
-
-
-    # print(document_index_ret) #
-
-    # return document_index_ret
-    # print(len(vec_sim))
 
 
 
 if __name__ == "__main__":
 
-    # file_path = BasePath + "/data/judgment_kill.txt"
     print("----------------------- 加载数据中，请等待..... -----------------------")
 
     criminal_list = [u'交通肇事罪',
@@ -217,7 +232,7 @@ if __name__ == "__main__":
     # print(1)
 
 
-    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v.txt") #[0:1890]
+    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt")
     print("the len of x_sample is: {}".format(len(x_sample)))
 
     # 随机森林训练
@@ -252,15 +267,6 @@ if __name__ == "__main__":
             print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(document_tuple[2]))
             print('\n'.join(document_list[document_tuple[0] - 1].split('|')))
             j += 1
-    # document_id_list = [document_all_id_list[document_tuple[0]] for document_tuple in document_ret_tuple]
-        # print("document index list is : {}".format(document_ret_tuple))
-        # print("document id list is : {}".format(document_id_list))
-        # j = 1
-        # for document_index in document_ret_tuple:
-        #     print("----------------------- 第"+ str(j) + "名匹配文档： -----------------------")
-        #     print('\n'.join(document_list[document_index-1].split('|')))
-        #     j += 1
-
     myseg.close()
 
 
@@ -294,16 +300,23 @@ if __name__ == "__main__":
 
 
 
-    num_topics = 100
-    dev_sample_percentage = .2
-    filepath_list = [BasePath + "/data/judgment" + str(i) + "word_from_mysql" + ".txt" for i in range(1,8)]
-    x_data,y_data = read_seg_document_list(filepath_list)
+
+
+    # num_topics = 100
+    # dev_sample_percentage = .3
+    # filepath_list = [BasePath + "/data/judgment" + str(i) + "wordforword2vec" + ".txt" for i in range(1,8)]
+    # x_data, y_data = read_seg_document_list(filepath_list)
+    # # corpus2word2vec(x_data)
     #
-    # corpus2word2vec(x_data)
-    #
-    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v.txt")
-    x_sample = Imputer().fit_transform(x_sample)
+    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt")
+    # # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
+    # # print(x_sample[-1].shape)
+    # x_sample = Imputer().fit_transform(x_sample)
+    # # for i in x_sample:
+    # #     print(i)
     # y_sample = np.array(y_data)
+    #
+    #
     # x_train, x_test, y_train, y_test = dev_sample(x_sample, y_sample, dev_sample_percentage)
     # print("data loaded finished.")
     #

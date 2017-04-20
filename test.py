@@ -1,54 +1,36 @@
+#coding=utf8
 import numpy as np
 import heapq
 
 
 
+a = np.array([[1,1,3,4],
+              [2,3,4,5],
+              [3,2,4,5],
+              [4,2,3,6]])
+print(a[1:])
+a_min = np.min(a, axis=0)
+a_max = np.max(a, axis=0)
+print(np.min(a, axis=0))
+print(np.max(a, axis=0))
+# print(a_min+a_max)
+# print(np.concatenate((a_min, a_max)))
+print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+print(np.hstack((a_min,a_max)))
+print("++++++++++++++++++++++++++++++++++++++++++++")
+print(np.vstack((a_min,a_max)))
+b = a[1]
+tmp_num = np.zeros(4)
 
-a = np.array([1, 6, 3, 4, 5])
+for i in range(0,1000):
+    tmp_num = np.vstack((tmp_num,b))
+    print(tmp_num.shape)
 
-# print(heapq.nlargest(3, range(len(a)), a.take))
+tmp_num = np.hstack((np.min(tmp_num, axis=0), np.max(tmp_num, axis=0)))
+print(tmp_num.reshape(1,-1))
 
-
-
-
-
-
-#
-b = np.array([[1,6,3,4,5],
-              [2,3,4,5,6],
-              [2,1,2,3,1],
-              [3,1,2,5,6]]*10000)
-
-#
-# print(np.dot(a, b.T)/ (np.linalg.norm(b,axis = 1)*np.linalg.norm(a)))
-
-c = np.array([1, 0, 1, 0, 1])
-
-# index = [0,2]
-
-d = np.array([[1, 0, 1, 0, 1],
-              [0, 1, 1, 0, 1],
-              [0, 1, 1, 0, 1]])
-
-# print(d[index])
- #
-print(np.sum(c & d, axis=1))
-num_path = np.sum(c & d, axis=1) / float(np.sum(c & c))
-# # print()
-print(num_path)
-
-a = np.array([1, 2, 3, 4, 5])
-# a = [1, 2, 3, 4, 5]
-b = [1,2,3]
-print(a[b])
-
-
-
-
-#
-#
-#
-#
+# print np.extend()
+# np.extend(a_min, a_max)
 #
 #
 # def rf_similarity(path_vec):

@@ -87,7 +87,7 @@ def seg_documentforword2vec(document_list):
 
 def save_seg_document(content_list,result_list, i):
     seg_dict = dict()
-    filepath = BasePath + "/data/judgment" + str(i) + "word_from_mysql" ".txt"
+    filepath = BasePath + "/data/judgment" + str(i) + "wordforword2vec" ".txt"
     seg_dict["content"] = content_list
     seg_dict["result"] = result_list
     encode_json = json.dumps(seg_dict, ensure_ascii = False)
@@ -123,10 +123,11 @@ if __name__ == "__main__":
 
 
     opt = DocumentsOnMysql() #
-    doucment_id_list, document_list = get_criminal_data(opt, criminal_list[0])
-    content_list, result_list = seg_document(document_list)
+    doucment_id_list, document_list = get_criminal_data(opt, criminal_list[6])
+    # content_list, result_list = seg_document(document_list)
+    content_list, result_list = seg_documentforword2vec(document_list)
     print(len(content_list))
-    save_seg_document(content_list, result_list, 1)
+    save_seg_document(content_list, result_list, 7)
 
 
 
