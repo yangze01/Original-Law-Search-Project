@@ -1,12 +1,12 @@
 #coding=utf8
-# from key_get import *
 import os
 import sys
 from pylab import *
 mpl.rcParams['font.sans-serif'] = ['FangSong']
 mpl.rcParams['axes.unicode_minus'] = False
-from data_helper import *
 import heapq
+# from key_get import *
+# from data_helper import *
 from gensim import corpora, models, similarities
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -103,7 +103,7 @@ def make_word2id(corpus):
     f_word_id.close()
 
 
-def sentence2vec(model, sentence, randomvec = None, vec_type = "minmax"):
+def sentence2vec(model, sentence, randomvec = None, vec_type = "average"):
     # print(vec_type)
     if randomvec == None:
         randomvec = np.random.normal(size = 100)
@@ -116,8 +116,8 @@ def sentence2vec(model, sentence, randomvec = None, vec_type = "minmax"):
             except:
                 tmp_num += randomvec
         tmp_num = tmp_num / len_word
-
         print(tmp_num.shape)
+        # print(tmp_num.shape)
 
     elif vec_type == "minmax":
         # print("in minmax")
@@ -128,22 +128,22 @@ def sentence2vec(model, sentence, randomvec = None, vec_type = "minmax"):
                 tmp_num = np.vstack((tmp_num, randomvec))
             # print(tmp_num)
         tmp_num = np.hstack((np.min(tmp_num, axis = 0), np.max(tmp_num, axis = 0)))
-        # print(tmp_num.shape)
+        print(tmp_num.shape)
         # print(tmp_num.shape)
         # print(tmp_num)
     # print(len(tmp_num))
     if(len_word == 0):
-        return np.zeros(200)
+        return np.zeros(100)
     return tmp_num
 
-def sentences2docvec(model, sentences, vec_type = "minmax"):
+def sentences2docvec(model, sentences, vec_type = "average"):
 
     i = 0
     random_vector = np.random.normal(size = 100)
     corpus_vec = list()
     for sentence in sentences:
-        if (i == 2658):
-            print(1)
+        # if (i == 2658):
+        #     print(1)
         tmp_num = sentence2vec(model, sentence, random_vector, vec_type)
         # len_word = len(set(sentence))
         print(i)
@@ -159,7 +159,7 @@ def sentences2docvec(model, sentences, vec_type = "minmax"):
         i = i + 1
     # fmt = "%f, "*599+"%f"
     print(type(np.array(corpus_vec, dtype=object)))
-    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt", np.array(corpus_vec))
+    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_average.txt", np.array(corpus_vec))
 
     # np.array(corpus_vec).tofile(BasePath + "/word2vec_model/corpus_w2v_minmax.txt")
     # f.close()
@@ -177,12 +177,12 @@ def corpus2word2vec(x_data):
 def get_candidate(topn, query_vec, corpus_vec):
     vec_sim = np.dot(query_vec, corpus_vec.T)  / (np.linalg.norm(corpus_vec, axis = 1) * np.linalg.norm(query_vec))
     topn_candidate = heapq.nlargest(topn, range(len(vec_sim)), vec_sim.take)
-    print("topn_candidate index from corpus_vec is : {}".format(topn_candidate))
+    # print("topn_candidate index from corpus_vec is : {}".format(topn_candidate))
     return topn_candidate, vec_sim[topn_candidate]
 
-def get_clf_sim(clf_model, seg_sentence_vec, candidate_vec, topn_candidate_index):
-    print("the candidate_vec len is : {}".format(len(candidate_vec)))
 
+def get_clf_sim(clf_model, seg_sentence_vec, candidate_vec, topn_candidate_index):
+    # print("the candidate_vec len is : {}".format(len(candidate_vec)))
     path_of_sample, _ = clf.decision_path(candidate_vec[topn_candidate_index])
     path_of_seg_sentence, _ = clf.decision_path(seg_sentence_vec)
     seg_sentence_array = path_of_seg_sentence.toarray()
@@ -197,7 +197,7 @@ def get_clf_sim(clf_model, seg_sentence_vec, candidate_vec, topn_candidate_index
 
 def get_sim_sentence(clf_model, seg_sentence, x_sample):
     w2v_model = load_model()
-    seg_sentence_vec = sentence2vec(w2v_model, seg_sentence)
+    seg_sentence_vec = sentence2vec(w2v_model, seg_sentence, "average")
     # vec_sim = np.dot(seg_sentence_vec, x_sample.T) / (np.linalg.norm(x_sample, axis=1) * np.linalg.norm(seg_sentence_vec))
     topn_candidate_index, candidate_vec_sim = get_candidate(300, seg_sentence_vec, x_sample)
     # print(topn_candidate_index)
@@ -232,11 +232,11 @@ if __name__ == "__main__":
     # print(1)
 
 
-    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt")
+    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
     print("the len of x_sample is: {}".format(len(x_sample)))
 
     # 随机森林训练
-    clf_filepath = BasePath + "/data/clf_model.m"
+    clf_filepath = BasePath + "/data/clf_model_average.m"
     if os.path.exists(clf_filepath):
         print("the model already exists.")
         clf = joblib.load(clf_filepath)
@@ -247,7 +247,7 @@ if __name__ == "__main__":
 
 
     print("请输入查询方式，整句查询请按1，关键词查询请按2： ")
-    i = input()#
+    i = input()
     while True:
         if(i == 1):
             print("请输入一句话，回车结束： ")
@@ -259,7 +259,6 @@ if __name__ == "__main__":
             seg_sentence = raw_input()
             seg_sentence = ' '.join(myseg.sen2word(seg_sentence)).encode('utf8').split()
             document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
-
         j = 1
         for document_tuple in document_ret_tuple:
             print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
@@ -308,20 +307,20 @@ if __name__ == "__main__":
     # x_data, y_data = read_seg_document_list(filepath_list)
     # # corpus2word2vec(x_data)
     #
-    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt")
+    #
+    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
     # # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
     # # print(x_sample[-1].shape)
     # x_sample = Imputer().fit_transform(x_sample)
     # # for i in x_sample:
     # #     print(i)
     # y_sample = np.array(y_data)
-    #
-    #
     # x_train, x_test, y_train, y_test = dev_sample(x_sample, y_sample, dev_sample_percentage)
     # print("data loaded finished.")
     #
+    #
     # # 随机森林训练
-    # clf_filepath = BasePath + "/data/clf_model.m"
+    # clf_filepath = BasePath + "/data/clf_model_average.m"
     # if os.path.exists(clf_filepath):
     #     print("the model already exists.")
     #     clf = joblib.load(clf_filepath)
