@@ -23,10 +23,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 from get_element import *
 # from word2vec import *
-# def read_seg_document():
 from sklearn.preprocessing import Imputer
-
-
 from scipy.sparse.csr import csr_matrix
 
 
@@ -215,109 +212,26 @@ if __name__ == "__main__":
 
     print("----------------------- 加载数据中，请等待..... -----------------------")
 
-    criminal_list = [u'交通肇事罪',
-                     u'过失致人死亡罪',
-                     u'故意杀人罪',
-                     u'故意伤害罪',
-                     u'抢劫罪',
-                     u'电信诈骗罪',
-                     u'拐卖妇女儿童罪']
-    opt_Document = DocumentsOnMysql()
-    document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
-    # print(document_all_id_list)
-    # print(len(document_all_id_list))
-    # content_all_list, result_all_list = fetch_all_content_result(document_list)
-    # test_content = content_all_list[-1]
-    # use_content = content_all_list # [:-1]
-    # print(1)
-
-
-    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
-    print("the len of x_sample is: {}".format(len(x_sample)))
-
-    # 随机森林训练
-    clf_filepath = BasePath + "/data/clf_model_average.m"
-    if os.path.exists(clf_filepath):
-        print("the model already exists.")
-        clf = joblib.load(clf_filepath)
-    else:
-        print("No model loaded!")
-    myseg = MySegment()
-    w2v_model = load_model()
-
-
-    print("请输入查询方式，整句查询请按1，关键词查询请按2： ")
-    i = input()
-    while True:
-        if(i == 1):
-            print("请输入一句话，回车结束： ")
-            sentence = raw_input()
-            seg_sentence = myseg.sen2word(sentence)
-            document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
-        else:
-            print("请输入关键词，以空格隔开，回车结束")
-            seg_sentence = raw_input()
-            seg_sentence = ' '.join(myseg.sen2word(seg_sentence)).encode('utf8').split()
-            document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
-        j = 1
-        for document_tuple in document_ret_tuple:
-            print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
-            print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(document_tuple[1]))
-            print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(document_tuple[2]))
-            print('\n'.join(document_list[document_tuple[0] - 1].split('|')))
-            j += 1
-    myseg.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # num_topics = 100
-    # dev_sample_percentage = .3
-    # filepath_list = [BasePath + "/data/judgment" + str(i) + "wordforword2vec" + ".txt" for i in range(1,8)]
-    # x_data, y_data = read_seg_document_list(filepath_list)
-    # # corpus2word2vec(x_data)
+    # criminal_list = [u'交通肇事罪',
+    #                  u'过失致人死亡罪',
+    #                  u'故意杀人罪',
+    #                  u'故意伤害罪',
+    #                  u'抢劫罪',
+    #                  u'电信诈骗罪',
+    #                  u'拐卖妇女儿童罪']
+    # opt_Document = DocumentsOnMysql()
+    # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
+    #
+    # # print(document_all_id_list)
+    # # print(len(document_all_id_list))
+    # # content_all_list, result_all_list = fetch_all_content_result(document_list)
+    # # test_content = content_all_list[-1]
+    # # use_content = content_all_list # [:-1]
+    # # print(1)
     #
     #
     # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
-    # # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
-    # # print(x_sample[-1].shape)
-    # x_sample = Imputer().fit_transform(x_sample)
-    # # for i in x_sample:
-    # #     print(i)
-    # y_sample = np.array(y_data)
-    # x_train, x_test, y_train, y_test = dev_sample(x_sample, y_sample, dev_sample_percentage)
-    # print("data loaded finished.")
-    #
+    # print("the len of x_sample is: {}".format(len(x_sample)))
     #
     # # 随机森林训练
     # clf_filepath = BasePath + "/data/clf_model_average.m"
@@ -325,42 +239,126 @@ if __name__ == "__main__":
     #     print("the model already exists.")
     #     clf = joblib.load(clf_filepath)
     # else:
-    #     print("the model doesn't exists.")
-    #     clf = RandomForestClassifier(n_estimators=100, bootstrap = True, oob_score = False , n_jobs = 16)
-    #     clf_model = clf.fit(x_train, y_train)
-    #     joblib.dump(clf, clf_filepath)
+    #     print("No model loaded!")
+    # myseg = MySegment()
+    # w2v_model = load_model()
     #
-    # # 评估模型准确率
-    # clf_pre = clf.predict(x_test)
-    # print(clf_pre)
-    # print(y_test)
     #
-    # # 评估模型准确率
-    # acc = (clf_pre == y_test).mean()
-    # print("精度为：")
-    # print(acc)
+    # print("请输入查询方式，整句查询请按1，关键词查询请按2： ")
+    # i = input()
+    # while True:
+    #     if(i == 1):
+    #         print("请输入一句话，回车结束： ")
+    #         sentence = raw_input()
+    #         seg_sentence = myseg.sen2word(sentence)
+    #         document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
+    #     else:
+    #         print("请输入关键词，以空格隔开，回车结束")
+    #         seg_sentence = raw_input()
+    #         seg_sentence = ' '.join(myseg.sen2word(seg_sentence)).encode('utf8').split()
+    #         document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
+    #     j = 1
+    #     for document_tuple in document_ret_tuple:
+    #         print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
+    #         print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(document_tuple[1]))
+    #         print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(document_tuple[2]))
+    #         print('\n'.join(document_list[document_tuple[0] - 1].split('|')))
+    #         j += 1
+    # myseg.close()
     #
-    # # # 输出决策树路径
-    # # path_of_randomforest, _ = clf.decision_path(x_test)
-    # # print(_)
-    # # # print("path of randomforest")
-    # # # print(path_of_randomforest.toarray())
-    # # print("sim matrix")
-    # # print(path_of_randomforest)
+    #
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    num_topics = 100
+    dev_sample_percentage = .3
+    filepath_list = [BasePath + "/data/judgment" + str(i) + "wordforword2vec" + ".txt" for i in range(1,8)]
+    x_data, y_data = read_seg_document_list(filepath_list)
+    # corpus2word2vec(x_data)
+
+
+    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
+    # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
+    # print(x_sample[-1].shape)
+    x_sample = Imputer().fit_transform(x_sample)
+    # for i in x_sample:
+    #     print(i)
+    y_sample = np.array(y_data)
+    x_train, x_test, y_train, y_test = dev_sample(x_sample, y_sample, dev_sample_percentage)
+    print("data loaded finished.")
+
+
+    # 随机森林训练
+    clf_filepath = BasePath + "/data/clf_model_average.m"
+    if os.path.exists(clf_filepath):
+        print("the model already exists.")
+        clf = joblib.load(clf_filepath)
+    else:
+        print("the model doesn't exists.")
+        clf = RandomForestClassifier(n_estimators=100, bootstrap = True, oob_score = False , n_jobs = 16)
+        clf_model = clf.fit(x_train, y_train)
+        joblib.dump(clf, clf_filepath)
+
+    # 评估模型准确率
+    clf_pre = clf.predict(x_test)
+    print(clf_pre)
+    print(y_test)
+
+    # 评估模型准确率
+    acc = (clf_pre == y_test).mean()
+    print("精度为：")
+    print(acc)
+
+    # # 输出决策树路径
+    # path_of_randomforest, _ = clf.decision_path(x_test)
+    # print(_)
+    # # print("path of randomforest")
     # # print(path_of_randomforest.toarray())
-    # # sim_matrix = rf_similarity(path_of_randomforest.toarray())
-    # # print("end sim matrix")
-    # # print(sim_matrix)
-    #
-    # # 输出混淆矩阵
-    # cm = confusion_matrix(y_test, clf_pre)
-    # print("Confusion matrix, without normalization")
-    # print(cm)
-    #
-    # # 正则化混淆矩阵
-    # cm_normalized = cm.astype('float') / cm.sum(axis = 1)[:, np.newaxis]
-    # print("Normalized confusion matrix")
-    # print(cm_normalized)
-    # plt.figure()
-    # plot_confusion_matrix(cm_normalized, title = 'Normalized confusion matrix')
-    # plt.show()
+    # print("sim matrix")
+    # print(path_of_randomforest)
+    # print(path_of_randomforest.toarray())
+    # sim_matrix = rf_similarity(path_of_randomforest.toarray())
+    # print("end sim matrix")
+    # print(sim_matrix)
+
+    # 输出混淆矩阵
+    cm = confusion_matrix(y_test, clf_pre)
+    print("Confusion matrix, without normalization")
+    print(cm)
+
+    # 正则化混淆矩阵
+    cm_normalized = cm.astype('float') / cm.sum(axis = 1)[:, np.newaxis]
+    print("Normalized confusion matrix")
+    print(cm_normalized)
+    plt.figure()
+    plot_confusion_matrix(cm_normalized, title = 'Normalized confusion matrix')
+    plt.show()
