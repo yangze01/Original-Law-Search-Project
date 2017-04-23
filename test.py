@@ -2,12 +2,6 @@
 import numpy as np
 import heapq
 
-
-
-
-
-
-
 a = np.array([[1,1,3,4],
               [2,3,4,5],
               [3,2,4,5],
@@ -24,14 +18,18 @@ print(np.hstack((a_min,a_max)))
 print("++++++++++++++++++++++++++++++++++++++++++++")
 print(np.vstack((a_min,a_max)))
 b = a[1]
-tmp_num = np.zeros(4)
+# tmp_num = np.zeros(4)
+#
+# for i in range(0,1000):
+#     tmp_num = np.vstack((tmp_num,b))
+#     print(tmp_num.shape)
+# tmp_num = np.hstack((np.min(tmp_num, axis=0), np.max(tmp_num, axis=0)))
+# print(tmp_num.reshape(1,-1))
 
-for i in range(0,1000):
-    tmp_num = np.vstack((tmp_num,b))
-    print(tmp_num.shape)
-
-tmp_num = np.hstack((np.min(tmp_num, axis=0), np.max(tmp_num, axis=0)))
-print(tmp_num.reshape(1,-1))
+a = {str(i):i for i in range(10)}
+print(a)
+for key,value in a.items():
+    print(key, value)
 
 # print np.extend()
 # np.extend(a_min, a_max)
@@ -49,3 +47,10 @@ print(tmp_num.reshape(1,-1))
 #             sim_vec[i][j] = num_path
 #             sim_vec[j][i] = num_path
 #     return sim_vec/sim_vec.diagonal().T
+import tensorflow as tf
+a = tf.constant(1)
+b = tf.constant(2)
+sess = tf.Session()
+print(sess.run(a+b))
+# print(2123)
+

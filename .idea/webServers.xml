@@ -3,7 +3,23 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="99bfb234-a39f-4bc5-8c9b-e90a457b653a" name="lab-ubuntu" url="http://10.108.217.76">
-        <fileTransfer host="10.108.217.76" port="22" rootFolder="/home/john/remote/home/john/remote" accessType="SFTP">
+        <fileTransfer host="10.108.217.76" port="22" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="bdfbcf1e-700e-47dd-912b-0c75905f5dd3" name="cetc-usr04" url="http://10.168.103.17">
+        <fileTransfer host="10.168.103.17" port="22" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="59e7475b-d1f2-4d38-9985-ae51c082a7bf" name="cetc-len" url="http://10.168.103.79">
+        <fileTransfer host="10.168.103.79" port="22" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>
