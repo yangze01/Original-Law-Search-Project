@@ -49,3 +49,5 @@ print(tmp_num.reshape(1,-1))
 #             sim_vec[i][j] = num_path
 #             sim_vec[j][i] = num_path
 #     return sim_vec/sim_vec.diagonal().T
+a = {str(i):i for i in range(1,15)}
+print(a)
