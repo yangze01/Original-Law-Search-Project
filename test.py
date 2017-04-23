@@ -3,6 +3,7 @@ import numpy as np
 import heapq
 
 
+import tensorflow as tf
 
 
 
@@ -51,3 +52,7 @@ print(tmp_num.reshape(1,-1))
 #     return sim_vec/sim_vec.diagonal().T
 a = {str(i):i for i in range(1,15)}
 print(a)
+a = tf.constant(1)
+b = tf.constant(2)
+sess = tf.Session()
+print(sess.run(a+b))

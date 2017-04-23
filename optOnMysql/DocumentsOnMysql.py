@@ -23,6 +23,18 @@ class DocumentsOnMysql(object):
             print('\n       '.join(it[5].split('|')))
             return 1
 
+    def getById(self, id):
+        cur = self.opt_OnMySql.exeQuery("select * from document where _id = '%d'" % id)
+        it = cur.fetchone()
+        # print(it)
+        # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")#
+        if it == None:
+            # print("there is nothing found")
+            return None
+        else:
+            # print(it[5])
+            # print('\n       '.join(it[5].split('|')))
+            return it
 
     def findbycriminal(self, crim):
         '''
