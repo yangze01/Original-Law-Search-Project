@@ -46,7 +46,7 @@ for key,value in a.items():
 #             num_path = np.sum(path_vec[i] & path_vec[j])
 #             sim_vec[i][j] = num_path
 #             sim_vec[j][i] = num_path
-#     return sim_vec/sim_vec.diagonal().T
+#     return sim_vec/sim_vec.diagonal().T#
 import tensorflow as tf
 a = tf.constant(1)
 b = tf.constant(2)
