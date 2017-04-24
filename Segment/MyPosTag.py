@@ -14,7 +14,7 @@ class MyPostagger(object):
         self.postagger = Postagger()
         self.postagger.load(self.model)
 
-    def load_default_model(self):
+    def load_default_model(self):#
         self.postagger.load(self.model)
     def get_pos(self, words_list):
         return self.postagger.postag(words_list)
