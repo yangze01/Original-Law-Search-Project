@@ -27,6 +27,27 @@ from sklearn.preprocessing import Imputer
 from scipy.sparse.csr import csr_matrix
 
 
+# load model and others
+fv_Word2Vec = BasePath + "/word2vec_model/fv_Word2Vec"
+w2v_model = gensim.models.Word2Vec.load(fv_Word2Vec)
+# id索引
+document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
+print("load document index finished, the length is : {}".format(len(document_all_id_list)))
+# 语料向量
+x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
+print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_average.txt"))
+# 随机森林训练
+clf_filepath = BasePath + "/data/clf_model_average.m"
+if os.path.exists(clf_filepath):
+    print("the model already exists in :{}".format(clf_filepath))
+    clf = joblib.load(clf_filepath)
+else:
+    print("No model loaded!")
+# 分词模块
+myseg = MySegment()
+opt_Document = DocumentsOnMysql()
+
+
 def dev_sample(x_sample, y_sample, dev_sample_percentage):
     np.random.seed(10)
     print(len(y_sample))
@@ -161,7 +182,7 @@ def load_model():
     return model
 
 def corpus2word2vec(x_data):
-    w2v_model = load_model()
+    # w2v_model = load_model()
     sentences2docvec(w2v_model, x_data)
 
 
@@ -178,93 +199,137 @@ def get_clf_sim(clf_model, seg_sentence_vec, candidate_vec, topn_candidate_index
     sample_array = path_of_sample.toarray()
     clf_sim = np.sum(seg_sentence_array & sample_array, axis=1) / float(np.sum(seg_sentence_array & seg_sentence_array))
 
-    top_clf_index = heapq.nlargest(10, range(len(clf_sim)), clf_sim.take)
+    top_clf_index = heapq.nlargest(50, range(len(clf_sim)), clf_sim.take)
     # return np.array(topn_candidate_index)[top_clf_index]
     return top_clf_index, clf_sim
 
 
 
 def get_sim_sentence(clf_model, seg_sentence, x_sample):
-    w2v_model = load_model()
+    # w2v_model = load_model()
     seg_sentence_vec = sentence2vec(w2v_model, seg_sentence, vec_type = "average")
     # vec_sim = np.dot(seg_sentence_vec, x_sample.T) / (np.linalg.norm(x_sample, axis=1) * np.linalg.norm(seg_sentence_vec))
     topn_candidate_index, candidate_vec_sim = get_candidate(300, seg_sentence_vec, x_sample)
     # print(topn_candidate_index)
     top_clf_index, clf_sim = get_clf_sim(clf_model, seg_sentence_vec, x_sample, topn_candidate_index)
+    # document_ret_dict = dict()
+    # document_ret_tuple = [(document_all_id_list[topn_candidate_index[i]], clf_sim[i], candidate_vec_sim[i]) for i in top_clf_index]
 
-    document_ret_tuple = [(topn_candidate_index[i], clf_sim[i], candidate_vec_sim[i]) for i in top_clf_index]
-
-    for i in document_ret_tuple:
-        print(i)
-    return document_ret_tuple
+    # document_ret_dict = [(document_all_id_list[topn_candidate_index[i]], clf_sim[i]) for i in top_clf_index]
+    document_ret_dict = [{document_all_id_list[topn_candidate_index[i]]:clf_sim[i]} for i in top_clf_index]
 
 
+
+    # dict = sorted(document_ret_dict.items(), key = lambda d:d[1], reverse = True)
+    # for i in top_clf_index:
+    #     document_ret_dict[document_all_id_list[topn_candidate_index[i]]] = clf_sim[i]
+
+    # for i in document_ret_tuple:
+    #     print(i)
+
+    # for json_ob in document_ret_dict:
+    #     for key,value in json_ob.items():
+    #         print(key,value)
+
+    # return document_ret_tuple
+    print(document_ret_dict)
+    return document_ret_dict
+
+def impl_sim(search_type, sentence):
+    seg_sentence = myseg.sen2word(sentence.encode('utf8'))
+    document_ret_dict = get_sim_sentence(clf, seg_sentence, x_sample)
+    return document_ret_dict
 
 if __name__ == "__main__":
-
-    print("----------------------- 加载数据中，请等待..... -----------------------")
-
-    criminal_list = [u'交通肇事罪',
-                     u'过失致人死亡罪',
-                     u'故意杀人罪',
-                     u'故意伤害罪',
-                     u'抢劫罪',
-                     u'电信诈骗罪',
-                     u'拐卖妇女儿童罪']
-    opt_Document = DocumentsOnMysql()
-    # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
-    # np.savetxt(BasePath + "/data/document_index.txt", np.array(document_all_id_list))
-    document_all_id_list = [int(i) for i in np.loadtxt(BasePath + "/data/document_index.txt")]
-    print("load document index finished, the length is : {}".format(len(document_all_id_list)))
-    # print(document_all_id_list)
-    # print(len(document_all_id_list))
-    # content_all_list, result_all_list = fetch_all_content_result(document_list)
-    # test_content = content_all_list[-1]
-    # use_content = content_all_list # [:-1]
-    # print(1)
-
-    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
-    print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_average.txt"))
-
-    # 随机森林训练
-    clf_filepath = BasePath + "/data/clf_model_average.m"
-    if os.path.exists(clf_filepath):
-        print("the model already exists in :{}".format(clf_filepath))
-        clf = joblib.load(clf_filepath)
-    else:
-        print("No model loaded!")
-    myseg = MySegment()
-    w2v_model = load_model()
-
-    # opt_sql = DocumentsOnMysql()
-    print("请输入查询方式，整句查询请按1，关键词查询请按2： ")
-    i = input()
-    while True:
-        if(i == 1):
-            print("请输入一句话，回车结束： ")
-            sentence = raw_input()
-            seg_sentence = myseg.sen2word(sentence)
-            document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
-        else:
-            print("请输入关键词，以空格隔开，回车结束")
-            seg_sentence = raw_input()
-            seg_sentence = ' '.join(myseg.sen2word(seg_sentence)).encode('utf8').split()
-            document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
+    while(True):
+        print("请输入一句话或空格间隔的关键词，回车结束： ")
+        sentence = raw_input()
+        document_ret_dict = impl_sim(2, sentence)
         j = 1
-
-
-        for document_tuple in document_ret_tuple:
+        for json_obj in document_ret_dict:
             print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
-            print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(document_tuple[1]))
-            print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(document_tuple[2]))
+            print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(json_obj.keys()[0]))
+            print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(json_obj.values()[0]))
 
-            print(document_all_id_list[document_tuple[0]])
+            print(json_obj.keys()[0])
             # print('\n'.join(document_list[document_tuple[0]].split('|')))
             # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-            print('\n'.join(opt_Document.getById(document_all_id_list[document_tuple[0]])[5].split('|')))
+            print('\n'.join(opt_Document.getById(json_obj.keys()[0])[5].split('|')))
             j += 1
-    myseg.close()
 
+
+
+
+
+
+
+    # print("----------------------- 加载数据中，请等待..... -----------------------")
+    #
+    # criminal_list = [u'交通肇事罪',
+    #                  u'过失致人死亡罪',
+    #                  u'故意杀人罪',
+    #                  u'故意伤害罪',
+    #                  u'抢劫罪',
+    #                  u'电信诈骗罪',
+    #                  u'拐卖妇女儿童罪']
+    # opt_Document = DocumentsOnMysql()
+    # # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
+    # # np.savetxt(BasePath + "/data/document_index.txt", np.array(document_all_id_list))
+    #
+    # # document_all_id_list = [int(i) for i in np.loadtxt(BasePath + "/data/document_index.txt")]
+    # document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
+    # print("load document index finished, the length is : {}".format(len(document_all_id_list)))
+    #
+    # # print(document_all_id_list)
+    # # print(len(document_all_id_list))
+    # # content_all_list, result_all_list = fetch_all_content_result(document_list)
+    # # test_content = content_all_list[-1]
+    # # use_content = content_all_list # [:-1]
+    # # print(1)
+    #
+    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
+    # print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_average.txt"))
+    #
+    # # 随机森林训练
+    # clf_filepath = BasePath + "/data/clf_model_average.m"
+    # if os.path.exists(clf_filepath):
+    #     print("the model already exists in :{}".format(clf_filepath))
+    #     clf = joblib.load(clf_filepath)
+    # else:
+    #     print("No model loaded!")
+    #
+    # myseg = MySegment()
+    # # w2v_model = load_model()
+    #
+    # # opt_sql = DocumentsOnMysql()
+    # print("请输入查询方式，整句查询请按1，关键词查询请按2： ")
+    # i = input()
+    # while True:
+    #     if(i == 1):
+    #         print("请输入一句话，回车结束： ")
+    #         sentence = raw_input()
+    #         seg_sentence = myseg.sen2word(sentence)
+    #         document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
+    #     else:
+    #         print("请输入关键词，以空格隔开，回车结束")
+    #         seg_sentence = raw_input()
+    #         seg_sentence = seg_sentence.encode('utf8').split(' ')
+    #         document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
+    #     j = 1
+    #
+    #
+    #     for key in document_ret_tuple.keys():
+    #         print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
+    #         print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(document_ret_tuple[key]['clf_sim']))
+    #         print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(document_ret_tuple[key]['vec_sim']))
+    #
+    #         print(key)
+    #         # print('\n'.join(document_list[document_tuple[0]].split('|')))
+    #         # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    #         print('\n'.join(opt_Document.getById(key)[5].split('|')))
+    #         j += 1
+    # myseg.close()
+    #
 
 
 

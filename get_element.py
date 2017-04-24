@@ -45,7 +45,7 @@ def get_details(document):
         # print("------------------------------------")
         return_str = search_result.group()
     else:
-        return_str = document[0:200]
+        return_str = document[0:3*200]
     return return_str
 
 def get_legal_behaviors_words(myseg, document):
