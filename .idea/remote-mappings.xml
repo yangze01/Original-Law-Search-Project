@@ -24,6 +24,13 @@
             </list>
           </settings>
         </remote-mappings>
+        <remote-mappings server-id="python@sftp://john@10.108.217.76:22/usr/bin/python">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$" remote-root="/home/john/remote/rebuild_judgment" />
+            </list>
+          </settings>
+        </remote-mappings>
       </list>
     </list>
   </component>
