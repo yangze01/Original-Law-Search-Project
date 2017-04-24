@@ -100,35 +100,38 @@ def make_word2id(corpus):
     f_word_id.close()
 
 
-def sentence2vec(model, sentence, randomvec = None, vec_type = "average"):
+def sentence2vec(model, sentence, randomvec = None, vec_type = "minmax"):
     # print(vec_type)
     if randomvec == None:
         randomvec = np.random.normal(size = 100)
     len_word = len(set(sentence))
     tmp_num = np.zeros(100)
     if vec_type == "average":
+        if (len_word == 0):
+            return np.zeros(100)
         for word in set(sentence):
             try:
                 tmp_num += model[word.decode('utf8')]
             except:
                 tmp_num += randomvec
         tmp_num = tmp_num / len_word
-        print(tmp_num.shape)
         # print(tmp_num.shape)
+
 
     elif vec_type == "minmax":
         # print("in minmax")
+        if (len_word == 0):
+            return np.zeros(200)
         for word in set(sentence):
             try:
                 tmp_num = np.vstack((tmp_num, model[word.decode('utf8')]))
             except:
                 tmp_num = np.vstack((tmp_num, randomvec))
         tmp_num = np.hstack((np.min(tmp_num, axis = 0), np.max(tmp_num, axis = 0)))
-    if(len_word == 0):
-        return np.zeros(100)
+
     return tmp_num
 
-def sentences2docvec(model, sentences, vec_type = "average"):
+def sentences2docvec(model, sentences, vec_type = "minmax"):
 
     i = 0
     random_vector = np.random.normal(size = 100)
@@ -149,7 +152,7 @@ def sentences2docvec(model, sentences, vec_type = "average"):
         # tmp_num = tmp_num/len_word
         corpus_vec.append(tmp_num)
         i = i + 1
-    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_average.txt", np.array(corpus_vec))
+    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt", np.array(corpus_vec))
 
 
 def load_model():
@@ -211,7 +214,7 @@ if __name__ == "__main__":
     opt_Document = DocumentsOnMysql()
     # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
     # np.savetxt(BasePath + "/data/document_index.txt", np.array(document_all_id_list))
-    document_all_id_list = list(np.loadtxt(BasePath + "/data/document_index.txt"))
+    document_all_id_list = [int(i) for i in np.loadtxt(BasePath + "/data/document_index.txt")]
     print("load document index finished, the length is : {}".format(len(document_all_id_list)))
     # print(document_all_id_list)
     # print(len(document_all_id_list))
@@ -220,7 +223,7 @@ if __name__ == "__main__":
     # use_content = content_all_list # [:-1]
     # print(1)
 
-    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")#[:10893]
+    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
     print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_average.txt"))
 
     # 随机森林训练
