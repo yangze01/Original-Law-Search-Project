@@ -36,3 +36,5 @@ class MyPostagger(object):
     def close(self):
         self.postagger.release()
         print(self.postagger.release())
+
+
