@@ -216,9 +216,12 @@ def get_sim_sentence(clf_model, seg_sentence, x_sample):
     # document_ret_tuple = [(document_all_id_list[topn_candidate_index[i]], clf_sim[i], candidate_vec_sim[i]) for i in top_clf_index]
 
     # document_ret_dict = [(document_all_id_list[topn_candidate_index[i]], clf_sim[i]) for i in top_clf_index]
-    document_ret_dict = [{document_all_id_list[topn_candidate_index[i]]:clf_sim[i]} for i in top_clf_index]
-
-
+    # document_ret_dict = [{document_all_id_list[topn_candidate_index[i]]:clf_sim[i]} for i in top_clf_index]
+    document_ret_dict = [{'id' : document_all_id_list[topn_candidate_index[i]],
+                          'final_sim' : clf_sim[i],
+                          'vec_sim' : candidate_vec_sim[i]} for i in top_clf_index]
+#
+    document_ret_dict.sort(key=lambda x: x["final_sim"],reverse = True)
 
     # dict = sorted(document_ret_dict.items(), key = lambda d:d[1], reverse = True)
     # for i in top_clf_index:

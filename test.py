@@ -63,29 +63,33 @@
 # print(a[:3*4])
 
 
-# import requests
-# import json
-# sentence = "张某 酒后 驾车 ， 撞死 行人，之后 驾车 逃逸"
-# # sentence = None
-# a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
+import requests
+import json
+sentence = "张某 酒后 驾车 ， 撞死 行人，之后 驾车 逃逸"
+# sentence = None
+a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
 # # b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
 # # url = "http://0.0.0.0:5000/api_sim?search_type=" + str(1) + "&" + "sentence='%s'"%sentence
 # # print(url)
-# # b = requests.get(url)
+# b = requests.get(url)
 # # print(b)
-# a_decode = json.loads(a.content)
+print(a)
+a_decode = json.loads(a.content)
 # # b_decode = json.loads(b.content)
 # print(a)
 # # print(b)
-# print(a_decode)
+print(a_decode)
+for i in a_decode:
+    print(i)
+# print(type(a_decode))
 # # print(b_decode)
 # # print(a_decode['out'])
 import json
 from collections import OrderedDict
-d = {str(i):i for i in range(10)}
-print(d)
-json_d = json.dumps(d,sort_values= True)
-print(json_d)
+# d = {str(i):i for i in range(10)}
+# print(d)
+# json_d = json.dumps(d,sort_values= True)
+# print(json_d)
 # d = OrderedDict(sorted(d.items(),key = lambda t:t[0]))
 # e = {key:value for key,value in d.items()}
 # print(d)
