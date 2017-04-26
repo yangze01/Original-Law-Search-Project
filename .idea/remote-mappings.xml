@@ -10,6 +10,27 @@
             </list>
           </settings>
         </remote-mappings>
+        <remote-mappings server-id="python@ssh://usr04@10.168.103.17:22/usr/bin/python">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$" remote-root="/home/usr04/remote_run/rebuild_judgment" />
+            </list>
+          </settings>
+        </remote-mappings>
+        <remote-mappings server-id="python@ssh://lenstr@10.168.103.79:22/usr/bin/python">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$" remote-root="/home/lenstr/remote/rebuild_judgment" />
+            </list>
+          </settings>
+        </remote-mappings>
+        <remote-mappings server-id="python@sftp://john@10.108.217.76:22/usr/bin/python">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$" remote-root="/home/john/remote/rebuild_judgment" />
+            </list>
+          </settings>
+        </remote-mappings>
       </list>
     </list>
   </component>
