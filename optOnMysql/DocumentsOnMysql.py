@@ -100,7 +100,7 @@ class DocumentsOnMysql(object):
         # sta = self.opt_OnMySql.exeUpdate("insert into test (id,title) values(%d"%(int(document_unit["id"]))+",'"+document_unit["title"]+"')")
         return sta
 
-    def deleteById(self,id):
+    def deleteById(self,id):#
         sta = self.opt_OnMySql.exeDeleteById("delete from document where id='%d'"%id)
         return sta
 
