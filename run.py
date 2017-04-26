@@ -24,7 +24,7 @@ def get_sim_dict():
 	document_ret_dict = impl_sim(search_type, sentence)
 	return jsonify(document_ret_dict)
 
-if __name__ == '__main__':#
+if __name__ == '__main__':##
 	print("begin flask service")
 	# socketio.run(app, debug=True)
 	app.run(host='0.0.0.0')

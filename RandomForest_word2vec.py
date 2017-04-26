@@ -17,7 +17,7 @@ from Segment import MySegment
 import gensim
 import datetime
 import matplotlib.pyplot as plt
-np.seterr(divide='ignore', invalid='ignore')
+np.seterr(divide='ignore', invalid='ignore')#
 from sklearn.metrics import confusion_matrix
 reload(sys)
 sys.setdefaultencoding('utf8')

@@ -60,7 +60,7 @@
 #
 # a = "张某驾车逃逸，被警察逮捕。"
 #
-# print(a[:3*4])
+# print(a[:3*4])#
 
 
 import requests
