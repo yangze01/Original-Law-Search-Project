@@ -146,7 +146,7 @@ def read_seg_document_list(file_path_list):
         i = i + 1
         print("the read document size")
         print(len(document_list),len(y))
-    return all_document_list, label
+    return all_document_list, label#
 
 
 
