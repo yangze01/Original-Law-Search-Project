@@ -250,7 +250,6 @@ def impl_sim(search_type, sentence):
 
 if __name__ == "__main__":
     # a = 1
-
     while(True):
         print("请输入一句话或空格间隔的关键词，回车结束： ")
         sentence = raw_input()
@@ -258,9 +257,6 @@ if __name__ == "__main__":
         j = 1
         for json_obj in document_ret_dict:
             # print(json_obj['id'])
-
-
-
             # print(json_obj)
             print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
             print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(json_obj['final_sim']))

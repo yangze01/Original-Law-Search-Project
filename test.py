@@ -71,6 +71,7 @@ a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence'
 # # b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
 # # url = "http://0.0.0.0:5000/api_sim?search_type=" + str(1) + "&" + "sentence='%s'"%sentence
 # # print(url)
+
 # b = requests.get(url)
 # # print(b)
 print(a)

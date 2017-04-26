@@ -85,6 +85,7 @@ def read_document(file_path):
         # i += 1
         # print(line)
         line = json.loads(line.decode('utf8'))
+        # print(line)
         decode_line = ''.join(line['content'])
         # print(decode_line)
         return_document.append(decode_line.decode('utf8'))
@@ -153,6 +154,9 @@ def read_seg_document_list(file_path_list):
 if __name__ == "__main__":
 
     a = [BasePath + "/data/judgment" + str(i) + ".txt" for i in range(1,8)]
+
+
+
 
     # filepath = BasePath + "/data/judgment_trafficking.txt"
     # document_list = read_document(filepath)
