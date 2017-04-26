@@ -121,7 +121,7 @@ def make_word2id(corpus):
     f_word_id.close()
 
 
-def sentence2vec(model, sentence, randomvec = None, vec_type = "minmax"):
+def sentence2vec(model, sentence, randomvec = None, vec_type = "average"):
     # print(vec_type)
     if randomvec == None:
         randomvec = np.random.normal(size = 100)
@@ -152,7 +152,7 @@ def sentence2vec(model, sentence, randomvec = None, vec_type = "minmax"):
 
     return tmp_num
 
-def sentences2docvec(model, sentences, vec_type = "minmax"):
+def sentences2docvec(model, sentences, vec_type = "average"):
 
     i = 0
     random_vector = np.random.normal(size = 100)
@@ -173,7 +173,7 @@ def sentences2docvec(model, sentences, vec_type = "minmax"):
         # tmp_num = tmp_num/len_word
         corpus_vec.append(tmp_num)
         i = i + 1
-    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt", np.array(corpus_vec))
+    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_" + vec_type + ".txt", np.array(corpus_vec))
 
 
 def load_model():
@@ -216,11 +216,13 @@ def get_sim_sentence(clf_model, seg_sentence, x_sample):
     # document_ret_tuple = [(document_all_id_list[topn_candidate_index[i]], clf_sim[i], candidate_vec_sim[i]) for i in top_clf_index]
 
     # document_ret_dict = [(document_all_id_list[topn_candidate_index[i]], clf_sim[i]) for i in top_clf_index]
+
     # document_ret_dict = [{document_all_id_list[topn_candidate_index[i]]:clf_sim[i]} for i in top_clf_index]
+
     document_ret_dict = [{'id' : document_all_id_list[topn_candidate_index[i]],
                           'final_sim' : clf_sim[i],
                           'vec_sim' : candidate_vec_sim[i]} for i in top_clf_index]
-#
+
     document_ret_dict.sort(key=lambda x: x["final_sim"],reverse = True)
 
     # dict = sorted(document_ret_dict.items(), key = lambda d:d[1], reverse = True)
@@ -240,24 +242,34 @@ def get_sim_sentence(clf_model, seg_sentence, x_sample):
 
 def impl_sim(search_type, sentence):
     seg_sentence = myseg.sen2word(sentence.encode('utf8'))
+    # print("encode utf8 {}".format(seg_sentence[0]))
+    # seg_sentence1 = myseg.sen2word(sentence)
+    # print("no encode utf8 {}".format(seg_sentence1))
     document_ret_dict = get_sim_sentence(clf, seg_sentence, x_sample)
     return document_ret_dict
 
 if __name__ == "__main__":
+    # a = 1
+
     while(True):
         print("请输入一句话或空格间隔的关键词，回车结束： ")
         sentence = raw_input()
         document_ret_dict = impl_sim(2, sentence)
         j = 1
         for json_obj in document_ret_dict:
-            print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
-            print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(json_obj.keys()[0]))
-            print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(json_obj.values()[0]))
+            # print(json_obj['id'])
 
-            print(json_obj.keys()[0])
+
+
+            # print(json_obj)
+            print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
+            print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(json_obj['final_sim']))
+            print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(json_obj['vec_sim']))
+
+            print("document id {}".format(json_obj['id']))
             # print('\n'.join(document_list[document_tuple[0]].split('|')))
             # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-            print('\n'.join(opt_Document.getById(json_obj.keys()[0])[5].split('|')))
+            print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
             j += 1
 
 
@@ -370,10 +382,10 @@ if __name__ == "__main__":
     # dev_sample_percentage = .3
     # filepath_list = [BasePath + "/data/judgment" + str(i) + "wordforword2vec" + ".txt" for i in range(1,8)]
     # x_data, y_data = read_seg_document_list(filepath_list)
-    # # corpus2word2vec(x_data)
+    # corpus2word2vec(x_data)
     #
     #
-    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
+    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt")
     # # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
     # # print(x_sample[-1].shape)
     # x_sample = Imputer().fit_transform(x_sample)
@@ -385,7 +397,7 @@ if __name__ == "__main__":
     #
     #
     # # 随机森林训练
-    # clf_filepath = BasePath + "/data/clf_model_average.m"
+    # clf_filepath = BasePath + "/data/clf_model_minmax.m"
     # if os.path.exists(clf_filepath):
     #     print("the model already exists.")
     #     clf = joblib.load(clf_filepath)
@@ -404,28 +416,28 @@ if __name__ == "__main__":
     # acc = (clf_pre == y_test).mean()
     # print("精度为：")
     # print(acc)
-    #
-    # # # 输出决策树路径
-    # # path_of_randomforest, _ = clf.decision_path(x_test)
-    # # print(_)
-    # # # print("path of randomforest")
-    # # # print(path_of_randomforest.toarray())
-    # # print("sim matrix")
-    # # print(path_of_randomforest)
+
+    # # 输出决策树路径
+    # path_of_randomforest, _ = clf.decision_path(x_test)
+    # print(_)
+    # # print("path of randomforest")
     # # print(path_of_randomforest.toarray())
-    # # sim_matrix = rf_similarity(path_of_randomforest.toarray())
-    # # print("end sim matrix")
-    # # print(sim_matrix)
-    #
-    # # 输出混淆矩阵
-    # cm = confusion_matrix(y_test, clf_pre)
-    # print("Confusion matrix, without normalization")
-    # print(cm)
-    #
-    # # 正则化混淆矩阵
-    # cm_normalized = cm.astype('float') / cm.sum(axis = 1)[:, np.newaxis]
-    # print("Normalized confusion matrix")
-    # print(cm_normalized)
-    # plt.figure()
-    # plot_confusion_matrix(cm_normalized, title = 'Normalized confusion matrix')
-    # plt.show()
+    # print("sim matrix")
+    # print(path_of_randomforest)
+    # print(path_of_randomforest.toarray())
+    # sim_matrix = rf_similarity(path_of_randomforest.toarray())
+    # print("end sim matrix")
+    # print(sim_matrix)
+
+    # 输出混淆矩阵
+    cm = confusion_matrix(y_test, clf_pre)
+    print("Confusion matrix, without normalization")
+    print(cm)
+
+    # 正则化混淆矩阵
+    cm_normalized = cm.astype('float') / cm.sum(axis = 1)[:, np.newaxis]
+    print("Normalized confusion matrix")
+    print(cm_normalized)
+    plt.figure()
+    plot_confusion_matrix(cm_normalized, title = 'Normalized confusion matrix')
+    plt.show()

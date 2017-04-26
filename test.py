@@ -65,7 +65,7 @@
 
 import requests
 import json
-sentence = "张某 酒后 驾车 ， 撞死 行人，之后 驾车 逃逸"
+sentence = u"张某 酒后 驾车 ， 撞死 行人，之后 驾车 逃逸"
 # sentence = None
 a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
 # # b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
@@ -78,9 +78,13 @@ a_decode = json.loads(a.content)
 # # b_decode = json.loads(b.content)
 # print(a)
 # # print(b)
-print(a_decode)
-for i in a_decode:
-    print(i)
+# print(a_decode)
+
+
+
+
+# for i in a_decode:
+#     print(i)
 # print(type(a_decode))
 # # print(b_decode)
 # # print(a_decode['out'])

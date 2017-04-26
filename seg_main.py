@@ -123,15 +123,15 @@ if __name__ == "__main__":
 
     myseg = MySegment()
     opt = DocumentsOnMysql() #
-    # doucment_id_list, document_list = get_criminal_data(opt, criminal_list[6])
-    # # content_list, result_list = seg_document(document_list)
-    # content_list, result_list = seg_documentforword2vec(document_list)
-    # print(len(content_list))
-    # save_seg_document(content_list, result_list, 7)
+    doucment_id_list, document_list = get_criminal_data(opt, criminal_list[0])
+    # content_list, result_list = seg_document(document_list)
+    content_list, result_list = seg_documentforword2vec(document_list)
+    print(len(content_list))
+    save_seg_document(content_list, result_list, 1)
 
 
-    content, result = content_resultforword2vec(myseg, opt.getById(11151)[5])
-    print(' '.join(content))
+    # content, result = content_resultforword2vec(myseg, opt.getById(11151)[5])
+    # print(' '.join(content))
 
 
     # i = 1

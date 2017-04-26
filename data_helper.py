@@ -158,7 +158,6 @@ if __name__ == "__main__":
     # document_list = read_document(filepath)
     # content_list, result_list = seg_document(document_list)
     # save_seg_document(content_list, result_list, 7)
-
     # content_list = read_one_seg_document(BasePath + "/data/judgment7.txt")
     # print(len(content_list))
     # for i in content_list:

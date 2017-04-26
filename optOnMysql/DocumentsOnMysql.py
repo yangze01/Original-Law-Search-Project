@@ -84,8 +84,8 @@ class DocumentsOnMysql(object):
         #     # print("++++++++~~~~~~~~=================----------------")
         sta = 0
         try:
-            sql = "insert into document (title, court, url, content, criminal, date)values\
-             ('"+document_unit["title"]+"','"+document_unit["court"]+"','"+document_unit["url"]+"','"+document_unit["content"].encode('utf8')+"','"+document_unit["criminal"]+"','" +  document_unit["date"]+"')"
+            sql = "insert into document (title, court, url, content, criminal, date) values('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')".\
+                format(document_unit["title"], document_unit["court"], document_unit["url"], document_unit["content"].encode('utf8'), document_unit["criminal"], document_unit["date"])
             sta = self.opt_OnMySql.exeUpdate(sql)
             # print(sql)
             # if sta == 1:
@@ -114,6 +114,7 @@ class DocumentsOnMysql(object):
         self.opt_OnMySql.connClose()
 
 if __name__ == "__main__":
+    # print(1)
     document_unit = dict()
     # document_unit["_id"] = 2
     document_unit["title"] = "叶某交通肇事罪二审刑事裁定书"
@@ -127,9 +128,9 @@ if __name__ == "__main__":
     # print(document_unit)
     opt = DocumentsOnMysql()
 
-    # opt.insertOneDocuments(document_unit)
-    it = opt.findbycriminal(u"抢劫罪")
-    print(len(it))
+    opt.insertOneDocuments(document_unit)
+    # it = opt.findbycriminal(u"抢劫罪")
+    # print(len(it))
 
     # for i in it[0:5]:
     #     print('\n'.join(i[5].split('|')))
