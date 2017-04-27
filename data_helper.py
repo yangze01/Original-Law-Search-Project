@@ -1,5 +1,6 @@
 # coding=utf8
 from Segment.MySegment import *
+from get_element import *
 from optOnMysql.DocumentsOnMysql import *
 import json
 import sys
@@ -39,7 +40,7 @@ def get_criminal_data(opt_Documents, crim):
 
     document_id_list = list()
     document_list = list()
-    print("in get_criminal %s"%crim)
+    print("in get_criminal %s" % crim)
     iter = opt_Documents.findbycriminal(crim)
     print("in segment")
     for it in iter:
@@ -85,8 +86,8 @@ def read_document(file_path):
         # i += 1
         # print(line)
         line = json.loads(line.decode('utf8'))
-        # print(line)
-        decode_line = ''.join(line['content'])
+        print(line)
+        decode_line = ' '.join(line['content'])
         # print(decode_line)
         return_document.append(decode_line.decode('utf8'))
     return return_document
@@ -105,7 +106,7 @@ def content_result(myseg, document):
 
 def seg_document(document_list):
     content_list = []
-    result_list = []#
+    result_list = []
 
     myseg = MySegment()
     i = 0
@@ -146,7 +147,8 @@ def read_seg_document_list(file_path_list):
         i = i + 1
         print("the read document size")
         print(len(document_list),len(y))
-    return all_document_list, label#
+    return all_document_list, label
+
 
 
 

@@ -38,9 +38,7 @@ class OptOnMysql(object):
 
 if __name__ == "__main__":
 
+    print("test optOnMysql")
     opt_connect = OptOnMysql()
-    test = opt_connect.exeQuery("select * from document")
-    for i in test:
-        print(i[1])
-
-
+    test = opt_connect.exeUpdate("update document set keywords = '{0}' where _id = '{1}'".format("测试,插入,数据",1))
+    opt_connect.connClose()

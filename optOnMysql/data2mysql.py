@@ -47,7 +47,7 @@ def save_document2mysql(file_path, criminal):
 
 
 if __name__ == "__main__":
-    # opt = DocumentsOnMysql()
+    opt = DocumentsOnMysql()
     # opt.insertOneDocuments(document_unit)
     # print(opt)
     opt.findById("1")

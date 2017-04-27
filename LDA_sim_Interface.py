@@ -97,7 +97,7 @@ def get_sim_seg_sentence(seg_sentence, use_content): #
 
 def get_sim_sentence(sentence, use_content):
     '''
-    :param sentence:#
+    :param sentence:#df_model, corpus_tfidf_value):
     :param use_content:
     :return:
     '''

@@ -255,7 +255,7 @@ if __name__ == "__main__":
         sentence = raw_input()
         document_ret_dict = impl_sim(2, sentence)
         j = 1
-        for json_obj in document_ret_dict:
+        for json_obj in document_ret_dict[0:5]:
             # print(json_obj['id'])
             # print(json_obj)
             print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
@@ -426,14 +426,14 @@ if __name__ == "__main__":
     # print(sim_matrix)
 
     # 输出混淆矩阵
-    cm = confusion_matrix(y_test, clf_pre)
-    print("Confusion matrix, without normalization")
-    print(cm)
-
-    # 正则化混淆矩阵
-    cm_normalized = cm.astype('float') / cm.sum(axis = 1)[:, np.newaxis]
-    print("Normalized confusion matrix")
-    print(cm_normalized)
-    plt.figure()
-    plot_confusion_matrix(cm_normalized, title = 'Normalized confusion matrix')
-    plt.show()
+    # cm = confusion_matrix(y_test, clf_pre)
+    # print("Confusion matrix, without normalization")
+    # print(cm)
+    #
+    # # 正则化混淆矩阵
+    # cm_normalized = cm.astype('float') / cm.sum(axis = 1)[:, np.newaxis]
+    # print("Normalized confusion matrix")
+    # print(cm_normalized)
+    # plt.figure()
+    # plot_confusion_matrix(cm_normalized, title = 'Normalized confusion matrix')
+    # plt.show()

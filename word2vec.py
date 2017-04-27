@@ -19,9 +19,11 @@ def load_model():
 
 
 if __name__ == "__main__":
+
     filepath_list = [BasePath + "/data/judgment" + str(i) + "word_from_mysql" + ".txt" for i in range(1,8)]
+
     x_data,y_data = read_seg_document_list(filepath_list)
-    # print(' '.join(x_data[0]))
+
     model1 = gensim.models.Word2Vec(x_data, size=100, window=5, min_count=1, workers=20)
     fv_Word2Vec = BasePath + "/word2vec_model/fv_Word2Vec"
     print("complete train")
