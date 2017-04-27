@@ -34,7 +34,8 @@ class MyPostagger(object):
             return return_words
 
     def close(self):
+
         self.postagger.release()
-        print(self.postagger.release())
+        print("close the postagger {}".format(self.postagger.release()))
 
 
