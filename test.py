@@ -66,9 +66,11 @@
 import requests
 import json
 sentence = u"张某 酒后 驾车 ， 撞死 行人，之后 驾车 逃逸"
+sentence1 = u"解决"
+sentence2 = u"饕餮"
 # sentence = None
-a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
-b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
+a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence1})
+b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence2})
 # # b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
 # # url = "http://0.0.0.0:5000/api_sim?search_type=" + str(1) + "&" + "sentence='%s'"%sentence
 # # print(url)
