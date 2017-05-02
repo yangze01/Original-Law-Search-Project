@@ -2,6 +2,7 @@
 from gensim import corpora, models, similarities
 from data_helper import *
 from Segment.MyPosTag import *
+from get_element import *
 import logging
 from optOnMysql.DocumentsOnMysql import *
 import gensim
@@ -93,12 +94,7 @@ def make_tf_seg_document():
     myseg.close()
     save_tfidf_seg_document(document_id_list, seg_document_list, index + 1)
 
-if __name__ == "__main__":
-    # make_tf_seg_document()
-
-    # opt_connect = OptOnMysql()
-    # test = opt_connect.exeQuery("select * from document")
-    # opt_connect.connClose()
+def save_tfidf_words2mysql():
     print("test optOnMysql")
     opt_connect = OptOnMysql()
 
@@ -131,5 +127,54 @@ if __name__ == "__main__":
         print(word_str)
         print(document_id)
         opt_connect.exeUpdate("update document set keywords = '{0}' where _id = '{1}'".format(word_str, document_id))
+
+    opt_connect.connClose()
+
+if __name__ == "__main__":
+    # make_tf_seg_document()
+
+    # opt_connect = OptOnMysql()
+    # test = opt_connect.exeQuery("select * from document")
+    # opt_connect.connClose()
+    print("test optOnMysql")
+    opt_connect = OptOnMysql()
+    opt_document = DocumentsOnMysql()
+    # index = 7
+    # document_id_list, seg_document = read_tfidf_seg_document(index)
+    # print(document_id_list)
+    # print("document_id_list len is ： {}".format(len(document_id_list)))
+    # print("document_id_list len is ： {}".format(len(seg_document)))
+
+    for id in range(4911,11152):
+        print(id)
+        it = opt_document.getById(id)
+        content = ' '.join(it[5].split('|'))
+        abstract = content[content.find('。')+1:content.find('。',content.find('。')+200)+1]
+        # print(abstract)
+        opt_connect.exeUpdate("update document set abstract = '{0}' where _id = '{1}'".format(abstract, id))
+    opt_document.connClose()
+    # corpus_dictionary = make_dictionary(seg_document, index)
+    # corpus_token2id = corpus_dictionary.token2id
+    # corpus_id2token = {value: key for key, value in corpus_token2id.items()}
+    # print(corpus_token2id)
+    #
+    # corpus_tfidf_value, tf_idf_model = corpus_tfidf(corpus_dictionary, seg_document)
+    #
+    # for i in range(len(document_id_list)):
+    #     document_id = document_id_list[i]
+    #
+    #     doc_tfidf = corpus_tfidf_value[i]
+    #     sorted_doc_tfidf = sorted(doc_tfidf, key=lambda t: t[1], reverse=True)
+    #
+    #     if(sorted_doc_tfidf == []):
+    #         word_str = ""
+    #     else:
+    #         word_list = list()
+    #         for j in sorted_doc_tfidf[0:10]:
+    #             word_list.append(corpus_id2token[j[0]])
+    #         word_str = "," + ','.join(word_list) + ","
+    #     print(word_str)
+    #     print(document_id)
+    #     opt_connect.exeUpdate("update document set keywords = '{0}' where _id = '{1}'".format(word_str, document_id))
 
     opt_connect.connClose()
