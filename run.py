@@ -22,7 +22,7 @@ def get_sim_dict():
 	print(sentence)
 
 	document_ret_dict = impl_sim(search_type, sentence)
-	return jsonify(document_ret_dict)
+	return jsonify(document_ret_dict)#
 
 if __name__ == '__main__':##
 	print("begin flask service")

@@ -2,11 +2,12 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="Python 2.7.12 (/usr/bin/python2.7)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Remote Python 2.7.12 (ssh://usr04@10.168.103.17:22/usr/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Judgment_copy" />
     <orderEntry type="module" module-name="Judgment_copy" />
     <orderEntry type="module" module-name="lstm-char-cnn-tensorflow" />
+    <orderEntry type="module" module-name="cnn-lstm-language-model" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />
