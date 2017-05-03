@@ -62,7 +62,16 @@ class Vocab:
 
 
 if __name__ == "__main__":
-    print(1)
+    myseg = MySegment()
+    opt = DocumentsOnMysql()
+    it = opt.getById(1)
+    print(it[5])
+    senlist = myseg.paraph2sen(it[5].replace('|',''))
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    print("the len of senlist is : {}".format(len(senlist)))
+    for i in senlist:
+        print(i)
 
-
+    myseg.close()
+    opt.connClose()
 
