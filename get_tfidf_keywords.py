@@ -153,6 +153,7 @@ if __name__ == "__main__":
         # print(abstract)
         opt_connect.exeUpdate("update document set abstract = '{0}' where _id = '{1}'".format(abstract, id))
     opt_document.connClose()
+
     # corpus_dictionary = make_dictionary(seg_document, index)
     # corpus_token2id = corpus_dictionary.token2id
     # corpus_id2token = {value: key for key, value in corpus_token2id.items()}
