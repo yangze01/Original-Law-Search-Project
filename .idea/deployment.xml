@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="cetc-usr04" showNewOnSourceInSync="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="lab-ubuntu" showNewOnSourceInSync="false">
     <serverData>
-      <paths name="Copy of project-level server 'cetc-usr04'">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/home/usr04/remote_run/rebuild_judgment/" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
       <paths name="cetc-len">
         <serverdata>
           <mappings>
@@ -27,6 +20,14 @@
         <serverdata>
           <mappings>
             <mapping deploy="/home/john/remote/rebuild_judgment/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="lab-ubuntu1">
+        <serverdata>
+          <mappings>
+            <mapping local="$USER_HOME$/Desktop/char lstm language model/lstm-char-cnn-tensorflow-master" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

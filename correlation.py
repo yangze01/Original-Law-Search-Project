@@ -50,28 +50,31 @@ class Vocab:
     def load(cls, filename):
         with open(filename, 'rb') as f:
             token2index, index2token = pickle.load(f)
-
         return cls(token2index, index2token)
 
 
-
-
-
-
-
-
-
 if __name__ == "__main__":
+    word_vocab = Vocab()
+    word_vocab.feed('|')  # <unk> is at index 0 in word vocab
     myseg = MySegment()
-    opt = DocumentsOnMysql()
-    it = opt.getById(1)
-    print(it[5])
-    senlist = myseg.paraph2sen(it[5].replace('|',''))
-    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-    print("the len of senlist is : {}".format(len(senlist)))
-    for i in senlist:
-        print(i)
+    opt = OptOnMysql()
+    opt_on_documents = DocumentsOnMysql()
+    for id in range(1,10):
+        it = opt_on_documents.getById(id)
+        content_id = it[0]
+        content = it[5]
+        print(content_id)
+        senlist = myseg.paraph2sen(content.replace('|',''))
+        print("the length of senlist is : {} ".format(len(senlist)))#
+        for sentence in senlist:
+            word_set = set(myseg.sen2word(sentence.encode('utf8')))
+            for word in word_set:
+                word_vocab.feed(word)
+                opt.exeQuery("insert into ")
+            opt.exeQuery("insert into sen_index (word_list, content_id) values('{0}', '{1}')".format(' '.join(word_set), content_id))
 
-    myseg.close()
+            # print(word_set)
+
     opt.connClose()
-
+    opt_on_documents.connClose()
+    myseg.close()

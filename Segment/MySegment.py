@@ -130,7 +130,7 @@ class MySegment(object):
 
     def close(self):
         self.segmentor.release()
-        print("close the segmentor {}".format(self.segmentor.release()))
+        # print("close the segmentor {}".format(self.segmentor.release()))
 
 if __name__ == "__main__":
     print(1)
