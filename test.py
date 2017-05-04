@@ -61,13 +61,14 @@
 # a = "张某驾车逃逸，被警察逮捕。"
 #
 # print(a[:3*4])#
-
-
+from Segment import MySegment
+from optOnMysql import optOnMysql
+from optOnMysql.DocumentsOnMysql import *
 import requests
 import json
 sentence = u"张某 酒后 驾车 ， 撞死 行人，之后 驾车 逃逸"
 sentence1 = u"解决"
-sentence2 = u"抢银行"
+sentence2 = u"李某  拐卖妇女儿童 残疾  自首"
 # sentence = None
 # a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence1})
 b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence2})
@@ -85,9 +86,28 @@ print(b_decode)
 # print(a)
 # # print(b)
 # print(a_decode)
+opt_Document = DocumentsOnMysql()
+while (True):
+    print("请输入一句话或空格间隔的关键词，回车结束： ")
+    print(sentence2)
+    # sentence = raw_input()
+    document_ret_dict = b_decode
+    j = 1
+    for json_obj in document_ret_dict[0:5]:
+        # print(json_obj['id'])
+        # print(json_obj)
+        print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
+        print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(
+            json_obj['final_sim']))
+        print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(
+            json_obj['vec_sim']))
 
-
-
+        print("document id {}".format(json_obj['id']))
+        # print('\n'.join(document_list[document_tuple[0]].split('|')))
+        # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
+        j += 1
+    break
 
 # for i in a_decode:
 #     print(i)
@@ -104,4 +124,28 @@ from collections import OrderedDict
 # e = {key:value for key,value in d.items()}
 # print(d)
 
+a = set()
+a.add(1)
+a.add(2)
+a.add(3)
+# if 1 in a:
+#     print(True)
+# print(a)
+num_dict = dict()
+num_dict[1] = 'a'
+num_dict[2] = 'b'
+num_dict[3] = 'c'
 
+print(num_dict)
+
+if 4 in num_dict:
+    print(True)
+else:
+    print(False)
+
+
+
+
+a = set([1,2,3,4,5])
+b = set([1,2,3])
+print(a-b)
