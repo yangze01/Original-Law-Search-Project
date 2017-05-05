@@ -26,6 +26,11 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
+      <webServer id="sftp://john@10.108.217.76:22/usr/bin/python" name="sftp://john@10.108.217.76:22/usr/bin/python">
+        <fileTransfer host="10.108.217.76" port="22" accessType="SFTP">
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

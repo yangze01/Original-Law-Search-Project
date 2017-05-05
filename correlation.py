@@ -204,26 +204,27 @@ if __name__ == "__main__":
         word_in_sen_dict = json.loads(jsondata)
     print("the len of worddict is: {}".format(len(word_in_sen_dict)))
 
-    word_pair = dict()
-
-    for id1 in range(0, len(word_in_sen_dict)):
-        for id2 in range(id1+1, len(word_in_sen_dict)):
-            print(id1, id2)
-            l1 = set(word_in_sen_dict[str(id1)]) & set(word_in_sen_dict[str(id2)])
-            # print(len(l1))
-            if(len(l1) < 1):
-                continue
-            l2 = set(word_in_sen_dict[str(id1)]) - set(word_in_sen_dict[str(id2)])
-            l3 = set(word_in_sen_dict[str(id2)]) - set(word_in_sen_dict[str(id1)])
-            word_pair[(id1, id2)] = [len(l1), len(l2), len(l3)]
-
-    # 保存词对统计
-    countnum_word_in_sen_filepath = BasePath + "/data/countnum_word_in_sen.txt"
-    # count_word_sen_filepath = BasePath + "/data/count_word_in_sen_list.txt"
-    encode_json = json.dumps(word_pair, ensure_ascii=False)
-    with open(countnum_word_in_sen_filepath, "w+") as f:
-     f.write(encode_json)
-    print("seg countnum_word_in_sen_filepath saved as {}".format(count_word_sen_filepath))
+    # word_pair = dict()
+    #
+    # for id1 in range(0, len(word_in_sen_dict)):
+    #     for id2 in range(id1+1, len(word_in_sen_dict)):
+    #         print(id1, id2)
+    #         l1 = set(word_in_sen_dict[str(id1)]) & set(word_in_sen_dict[str(id2)])
+    #         # print(len(l1))
+    #         if(len(l1) < 1):
+    #             continue
+    #         l2 = set(word_in_sen_dict[str(id1)]) - set(word_in_sen_dict[str(id2)])
+    #         l3 = set(word_in_sen_dict[str(id2)]) - set(word_in_sen_dict[str(id1)])
+    #         word_pair[(id1, id2)] = [len(l1), len(l2), len(l3)]
+    #
+    # # 保存词对统计
+    # countnum_word_in_sen_filepath = BasePath + "/data/countnum_word_in_sen.txt"
+    # # count_word_sen_filepath = BasePath + "/data/count_word_in_sen_list.txt"
+    # encode_json = json.dumps(word_pair, ensure_ascii=False)
+    # with open(countnum_word_in_sen_filepath, "w+") as f:
+    #  f.write(encode_json)
+    # print("seg countnum_word_in_sen_filepath saved as {}".format(count_word_sen_filepath))
+    #
 
 
 
