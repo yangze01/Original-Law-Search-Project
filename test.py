@@ -1,5 +1,7 @@
 #coding=utf8
+from __future__ import division
 # import numpy as np
+
 # import heapq
 #
 #
@@ -144,8 +146,3 @@ else:
     print(False)
 
 
-
-
-a = set([1,2,3,4,5])
-b = set([1,2,3])
-print(a-b)

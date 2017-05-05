@@ -11,6 +11,7 @@ import pickle
 from data_helper import *
 from Segment.MySegment import *
 from Segment.MyPosTag import *
+# from __future__ import division
 
 class Vocab:
 
@@ -84,24 +85,6 @@ def save_seg_document(corpus_list):
         f.write(encode_json)
     print("seg document saved as {}".format(filepath))
 
-def save_bag_corpus(corpus_list):
-    seg_dict = dict()
-    filepath = BasePath + "/data/sen_word_corpus" + ".txt"
-    seg_dict["content"] = corpus_list
-    encode_json = json.dumps(seg_dict, ensure_ascii = False)
-    with open(filepath, "w+") as f:
-        f.write(encode_json)
-    print("seg document saved as {}".format(filepath))
-
-def load_bag_corpus():
-    file_path = BasePath + "/data/sen_word_corpus" + ".txt"
-    with open(file_path,"r+") as f:
-        jsondata = f.read()
-        jsondict = json.loads(jsondata)
-    content_list = jsondict['content']
-    return content_list
-
-
 def load_seg_document(file_path):
     with open(file_path,"r+") as f:
         jsondata = f.read()
@@ -109,8 +92,35 @@ def load_seg_document(file_path):
     content_list = jsondict['content']
     return content_list
 
+def save_bag_corpus(bag_corpus_dict):
+    # seg_dict = dict()
+    filepath = BasePath + "/data/sen_bag_word_corpus" + ".txt"
+    # seg_dict["content"] = corpus_list
+    encode_json = json.dumps(bag_corpus_dict, ensure_ascii = False)
+    with open(filepath, "w+") as f:
+        f.write(encode_json)
+    print("bag_corpus_dict saved as {}".format(filepath))
+
+def load_bag_corpus():
+    '''
+        将词袋表示的句子重新加载
+    :return:
+    '''
+    file_path = BasePath + "/data/sen_bag_word_corpus" + ".txt"
+    with open(file_path,"r+") as f:
+        jsondata = f.read()
+        jsondict = json.loads(jsondata)
+    # content_list = jsondict['content']
+    return jsondict
+
+
+
 
 def save_corpus():
+    '''
+        将语料分割为以句子为单位的行
+    :return: 将数据保存为sen_word_corpus
+    '''
     # word_vocab = Vocab()
     # word_vocab.feed('|')  # <unk> is at index 0 in word vocab
     myseg = MySegment()
@@ -136,50 +146,85 @@ def save_corpus():
 
 
 if __name__ == "__main__":
+    # save_corpus()
+
+    # 将数据保存为词袋模型
     # sen_word_corpus = load_seg_document(BasePath + "/data/sen_word_corpus" + ".txt")
     # dictionary = make_dictionary(sen_word_corpus)
+    # print("the dictionary len is : {}".format(len(dictionary)))
+    # print(dictionary.id2token)
+    # id2token = {value: key for key, value in dictionary.token2id.items()}
+
     # print("the len of dictionary: {}".format(len(dictionary.token2id)))
     # bag_corpus = doc2bag_corpus(dictionary, sen_word_corpus)
-    # bag_corpus_re = [[word_tuple[0] for word_tuple in sen_word_list] for sen_word_list in bag_corpus]
-    # len_corpus = len(bag_corpus)
-    # save_bag_corpus(bag_corpus_re)
-    # print(len_corpus)
-
-
-
-    # count_word_in_sen_dict = dict()
-    # bag2_corpus_re = load_bag_corpus()
-    # print(len(bag2_corpus_re))
-    # for i in range(0, len(bag2_corpus_re)):
-    #     # print("+++++++++++++++++++++++++++")
+    # print("the len of bag_corpus is : {}".format(len(bag_corpus)))
+    # bag_sen_dict = dict()
+    # for i in range(0, len(bag_corpus)):
     #     print(i)
-    #     # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-    #     tmp_word_id_list = bag2_corpus_re[i]
-    #     for word_id in tmp_word_id_list:
-    #         # print(word_id)
-    #         if word_id not in count_word_in_sen_dict:
-    #             count_word_in_sen_dict[word_id] = [i+1]
-    #         else:
-    #             count_word_in_sen_dict[word_id].append(i+1)
+    #     tmp_sen = bag_corpus[i]
+    #     bag_sen = [word_tuple[0] for word_tuple in tmp_sen]
+    #     # print(tmp_sen)
+    #     # print(bag_sen)
+    #     bag_sen_dict[i+1] = bag_sen
+    # print("the len of bag_sen_dict is : {}".format(len(bag_sen_dict)))
+    # save_bag_corpus(bag_sen_dict)
 
 
-    count_word_sen_filepath = BasePath + "/data/count_dict.txt"
-    # encode_json = json.dumps(count_word_in_sen_dict, ensure_ascii=False)
-    # with open(count_word_sen_filepath, "w+") as f:
-    #     f.write(encode_json)
-    # print("seg count_word_sen_filepath saved as {}".format(count_word_sen_filepath))
 
-    # file_path = BasePath + "/data/sen_word_corpus" + ".txt"
+   # # 统计每个单词出现的句子
+   #  count_word_in_sen_dict = dict()
+   #  bag_sen_dict = load_bag_corpus() #从0开始
+   #  print(len(bag_sen_dict))
+   #
+   #  for i in range(1, len(bag_sen_dict)+1):
+   #      # print("+++++++++++++++++++++++++++")
+   #      # print(i)
+   #      # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+   #      tmp_word_id_list = bag_sen_dict[str(i)]
+   #      for word_id in tmp_word_id_list:
+   #          # print(word_id)
+   #          if(word_id == 0):
+   #              print(tmp_word_id_list)
+   #          if word_id not in count_word_in_sen_dict:
+   #              count_word_in_sen_dict[word_id] = [i]
+   #          else:
+   #              count_word_in_sen_dict[word_id].append(i)
+   #
+    # count_word_sen_filepath = BasePath + "/data/count_word_in_sen_list.txt"
+   #  encode_json = json.dumps(count_word_in_sen_dict, ensure_ascii=False)
+   #  with open(count_word_sen_filepath, "w+") as f:
+   #      f.write(encode_json)
+   #  print("seg count_word_sen_filepath saved as {}".format(count_word_sen_filepath))
+
+
+    # 统计词对出现的次数
+    count_word_sen_filepath = BasePath + "/data/count_word_in_sen_list.txt"
     with open(count_word_sen_filepath,"r+") as f:
         jsondata = f.read()
-        jsondict = json.loads(jsondata)
-    print("the len of jsondict is: {}".format(len(jsondict)))
-    print(jsondict['1'])
-        # print(count_word_in_sen_dict)
-    # encode_json = json.dumps(seg_dict, ensure_ascii=False)
-    # with open(filepath, "w+") as f:
-    #     f.write(encode_json)
-    # print("seg document saved as {}".format(filepath))
+        word_in_sen_dict = json.loads(jsondata)
+    print("the len of worddict is: {}".format(len(word_in_sen_dict)))
+
+    word_pair = dict()
+
+    for id1 in range(0, len(word_in_sen_dict)):
+        for id2 in range(id1+1, len(word_in_sen_dict)):
+            print(id1, id2)
+            l1 = set(word_in_sen_dict[str(id1)]) & set(word_in_sen_dict[str(id2)])
+            # print(len(l1))
+            if(len(l1) < 1):
+                continue
+            l2 = set(word_in_sen_dict[str(id1)]) - set(word_in_sen_dict[str(id2)])
+            l3 = set(word_in_sen_dict[str(id2)]) - set(word_in_sen_dict[str(id1)])
+            word_pair[(id1, id2)] = [len(l1), len(l2), len(l3)]
+
+    # 保存词对统计
+    countnum_word_in_sen_filepath = BasePath + "/data/countnum_word_in_sen.txt"
+    # count_word_sen_filepath = BasePath + "/data/count_word_in_sen_list.txt"
+    encode_json = json.dumps(word_pair, ensure_ascii=False)
+    with open(countnum_word_in_sen_filepath, "w+") as f:
+     f.write(encode_json)
+    print("seg countnum_word_in_sen_filepath saved as {}".format(count_word_sen_filepath))
+
 
 
 
