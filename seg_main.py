@@ -20,6 +20,7 @@ def read_document(file_path):
         decode_line = ''.join(line['content'])
         return_document.append(decode_line.decode('utf8'))
     return return_document
+
 def content_result(myseg, document):
     judge_pattern = re.compile(u"(.*)((判决如下|裁定如下|判处如下|判决)(.*))")
     matcher1 = re.match(judge_pattern, document)#在源文本中搜索符合正则表达式的部分

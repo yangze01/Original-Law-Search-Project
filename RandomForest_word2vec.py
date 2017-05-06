@@ -25,7 +25,7 @@ from get_element import *
 # from word2vec import *
 from sklearn.preprocessing import Imputer
 from scipy.sparse.csr import csr_matrix
-
+import pickle
 
 # load model and others
 fv_Word2Vec = BasePath + "/word2vec_model/fv_Word2Vec"
@@ -237,8 +237,11 @@ def get_sim_sentence(clf_model, seg_sentence, x_sample):
     #         print(key,value)
 
     # return document_ret_tuple
+
     print(document_ret_dict)
     return document_ret_dict
+
+
 
 def impl_sim(search_type, sentence):
     seg_sentence = myseg.sen2word(sentence.encode('utf8'))
@@ -275,7 +278,7 @@ if __name__ == "__main__":
 
 
     # print("----------------------- 加载数据中，请等待..... -----------------------")
-    #
+    # [1]*1890 + [2]*1980 + [3]*1876 + [4]* 2004 + [5]*1927 + [6]*1214 + 260*[7]
     # criminal_list = [u'交通肇事罪',
     #                  u'过失致人死亡罪',
     #                  u'故意杀人罪',
@@ -379,8 +382,8 @@ if __name__ == "__main__":
     # filepath_list = [BasePath + "/data/judgment" + str(i) + "wordforword2vec" + ".txt" for i in range(1,8)]
     # x_data, y_data = read_seg_document_list(filepath_list)
     # corpus2word2vec(x_data)
-    #
-    #
+
+
     # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt")
     # # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
     # # print(x_sample[-1].shape)

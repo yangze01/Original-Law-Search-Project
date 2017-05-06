@@ -144,9 +144,5 @@ import json
 #     print(True)
 # else:
 #     print(False)
-test_dict = dict()
-tuple_a = (1,2)
-test_dict[tuple_a] = 1
-print(test_dict)
-test_dict[tuple_a] = [test_dict[tuple_a], 3]
-print(test_dict)
+print([1,2,3] + [4, 5, 6])
+# print(a)

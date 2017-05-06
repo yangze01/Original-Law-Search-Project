@@ -34,7 +34,8 @@
       <paths name="sftp://john@10.108.217.76:22/usr/bin/python">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/john/remote/testcnn" local="$PROJECT_DIR$" />
+            <mapping deploy="/home/john/remote/rebuild_judgment" local="$PROJECT_DIR$" />
+            <mapping deploy="/home/john/remote/testcnn" local="$PROJECT_DIR$/../testcnn/" />
           </mappings>
         </serverdata>
       </paths>
