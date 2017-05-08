@@ -16,6 +16,7 @@ from Segment import MyPosTag
 from Segment import MySegment
 import gensim
 import datetime
+from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 np.seterr(divide='ignore', invalid='ignore')#
 from sklearn.metrics import confusion_matrix
@@ -28,7 +29,7 @@ from scipy.sparse.csr import csr_matrix
 import pickle
 
 # load model and others
-fv_Word2Vec = BasePath + "/word2vec_model/fv_Word2Vec"
+fv_Word2Vec = BasePath + "/word2vec_model/fv_Word2Vec_test_min_count5"
 w2v_model = gensim.models.Word2Vec.load(fv_Word2Vec)
 # id索引
 document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
@@ -152,8 +153,8 @@ def sentence2vec(model, sentence, randomvec = None, vec_type = "average"):
 
     return tmp_num
 
-def sentences2docvec(model, sentences, vec_type = "average"):
 
+def sentences2docvec(model, sentences, vec_type = "average"):
     i = 0
     random_vector = np.random.normal(size = 100)
     corpus_vec = list()
@@ -204,6 +205,10 @@ def get_clf_sim(clf_model, seg_sentence_vec, candidate_vec, topn_candidate_index
     return top_clf_index, clf_sim
 
 
+def tsne_trans(input_vector):
+    X_tsne = TSNE(learning_rate = 100).fit_transform(input_vector)
+    return X_tsne
+
 
 def get_sim_sentence(clf_model, seg_sentence, x_sample):
     # w2v_model = load_model()
@@ -219,9 +224,27 @@ def get_sim_sentence(clf_model, seg_sentence, x_sample):
 
     # document_ret_dict = [{document_all_id_list[topn_candidate_index[i]]:clf_sim[i]} for i in top_clf_index]
 
+    # print(top_clf_index)
+    result_vec = x_sample[np.array(topn_candidate_index)[top_clf_index]]
+    tsne_vec = tsne_trans(result_vec)
+    # X_tsne = TSNE(learning_rate=100).fit_transform(tmp)
+    # plt.scatter(tsne_vec[:, 0], tsne_vec[:, 1])
+    # plt.show()
+    # print(tsne_vec)
+    tsne_vec_dict = {top_clf_index[i]:tsne_vec[i] for i in range(0, len(top_clf_index))}
+
+    # result_vec = x_sample(list(np.array(topn_candidate_index)[top_clf_index]))
+    # print(result_vec)
+
+
     document_ret_dict = [{'id' : document_all_id_list[topn_candidate_index[i]],
                           'final_sim' : clf_sim[i],
-                          'vec_sim' : candidate_vec_sim[i]} for i in top_clf_index]
+                          'vec_sim' : candidate_vec_sim[i],
+                          'position' : {
+                              'x' : tsne_vec_dict[i][0],
+                              'y' : tsne_vec_dict[i][1]}
+
+                         } for i in top_clf_index]
 
     document_ret_dict.sort(key=lambda x: x["final_sim"],reverse = True)
 
@@ -241,15 +264,33 @@ def get_sim_sentence(clf_model, seg_sentence, x_sample):
     print(document_ret_dict)
     return document_ret_dict
 
+def get_keywords(seg_sentence):
+    print(1)
+    return_word_list = list()
+    for word in set(seg_sentence):
+        try:
+            word_tuple_list = w2v_model.most_similar(word.decode('utf8'), topn=5)
 
-
+            word_dict_list = [{'word' : word_tuple[0].encode('utf8'),
+                               'cluster' : word.encode('utf8')} for word_tuple in word_tuple_list]
+            print(word_dict_list)
+            return_word_list += word_dict_list
+        except:
+            continue
+    return return_word_list
 def impl_sim(search_type, sentence):
     seg_sentence = myseg.sen2word(sentence.encode('utf8'))
-    # print("encode utf8 {}".format(seg_sentence[0]))
-    # seg_sentence1 = myseg.sen2word(sentence)
-    # print("no encode utf8 {}".format(seg_sentence1))
+
+    # for word in set(seg_sentence):
+    # for word in set(sentence):
+    return_word_list = get_keywords(seg_sentence)
+
+
+
     document_ret_dict = get_sim_sentence(clf, seg_sentence, x_sample)
-    return document_ret_dict
+    return_json_list = {'keywords':return_word_list,
+                        'result':document_ret_dict}
+    return return_json_list
 
 if __name__ == "__main__":
     # a = 1
@@ -258,7 +299,7 @@ if __name__ == "__main__":
         sentence = raw_input()
         document_ret_dict = impl_sim(2, sentence)
         j = 1
-        for json_obj in document_ret_dict[0:5]:
+        for json_obj in document_ret_dict['result'][0:5]:
             # print(json_obj['id'])
             # print(json_obj)
             print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
@@ -300,10 +341,10 @@ if __name__ == "__main__":
     # # test_content = content_all_list[-1]
     # # use_content = content_all_list # [:-1]
     # # print(1)
-    #
+
     # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
     # print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_average.txt"))
-    #
+
     # # 随机森林训练
     # clf_filepath = BasePath + "/data/clf_model_average.m"
     # if os.path.exists(clf_filepath):
@@ -311,7 +352,7 @@ if __name__ == "__main__":
     #     clf = joblib.load(clf_filepath)
     # else:
     #     print("No model loaded!")
-    #
+
     # myseg = MySegment()
     # # w2v_model = load_model()
     #
@@ -330,8 +371,8 @@ if __name__ == "__main__":
     #         seg_sentence = seg_sentence.encode('utf8').split(' ')
     #         document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
     #     j = 1
-    #
-    #
+
+
     #     for key in document_ret_tuple.keys():
     #         print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
     #         print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(document_ret_tuple[key]['clf_sim']))

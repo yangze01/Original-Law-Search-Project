@@ -29,24 +29,29 @@ if __name__ == "__main__":
     # print("complete train")
     # model1.save(fv_Word2Vec)
 
-
     model2 = load_model()
     print("model reload")
-    from optOnMysql.DocumentsOnMysql import *
-    optDocument = DocumentsOnMysql()
-    document = optDocument.getById(5)[5].encode('utf8')
-    from Segment.MySegment import *
-    import jieba.analyse
-    myseg = MySegment()
-    sentence = "张某酒后驾车，撞死行人，之后逃逸，最后被警察逮捕。"
-    word_list = myseg.sen2word(document)
-    key_word = jieba.analyse.textrank(document, topK = 10, withWeight = False)
-    print(' '.join(word_list))
-    print(' '.join(key_word))
-    # result = model2.most_similar('逃逸'.decode('utf8'),topn = 5)
+
+    # from optOnMysql.DocumentsOnMysql import *
+    # optDocument = DocumentsOnMysql()
+    # document = optDocument.getById(5)[5].encode('utf8')
+    # from Segment.MySegment import *
+    # import jieba.analyse
+    # myseg = MySegment()
+    # sentence = "张某酒后驾车，撞死行人，之后逃逸，最后被警察逮捕。"
+    # word_list = myseg.sen2word(document)
+    # key_word = jieba.analyse.textrank(document, topK = 10, withWeight = False)
+    # print(' '.join(word_list))
+    # print(' '.join(key_word))
+
+
+    result = model2.most_similar('逃逸'.decode('utf8'),topn = 5)
+
+
+    # print(result)
     # print(type(result))
-    # for i in result:
-    #     print(i[0])
+    for i in result:
+        print(i[0])
 
 
 

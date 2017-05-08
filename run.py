@@ -1,3 +1,4 @@
+#coding=utf8
 from flask import Flask, render_template
 from flask import request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 # from flask_socketio import SocketIO, emit, disconnect
@@ -25,6 +26,6 @@ def get_sim_dict():
 	return jsonify(document_ret_dict)#
 
 if __name__ == '__main__':
-	print("begin flask service")
+	print("begin flask service.")
 	# socketio.run(app, debug=True)
 	app.run(host='0.0.0.0')
