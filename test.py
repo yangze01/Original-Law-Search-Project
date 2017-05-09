@@ -1,16 +1,13 @@
 #coding=utf8
 from __future__ import division
 # import numpy as np
-
 # import heapq
-#
-#
 # import tensorflow as tf
-#
-#
-#
-#
-#
+
+
+
+
+
 # a = np.array([[1,1,3,4],
 #               [2,3,4,5],
 #               [3,2,4,5],
@@ -28,14 +25,14 @@ from __future__ import division
 # print(np.vstack((a_min,a_max)))
 # b = a[1]
 # tmp_num = np.zeros(4)
-#
+
 # for i in range(0,1000):
 #     tmp_num = np.vstack((tmp_num,b))
 #     print(tmp_num.shape)
-#
+
 # tmp_num = np.hstack((np.min(tmp_num, axis=0), np.max(tmp_num, axis=0)))
 # print(tmp_num.reshape(1,-1))
-#
+
 # # print np.extend()
 # # np.extend(a_min, a_max)
 # #
@@ -156,25 +153,10 @@ num_dict[3] = 'c'
 
 # print(num_dict)
 from itertools import combinations,product
+
 a = [1,2,3]
-b = [4,5]
-
-coms = product(a,b)
-print(list(coms))
-#
-# testList = [1,2,3,4,5,6]
-# coms = combinations(testList,2)
-# for i in coms:
-#     print(str(i))
-# print(list(coms))
-
-# a = [1, 2, 3]
-# print a/3
-import numpy as np
-a = np.array(a)
-
-print(a[[1,2]])
-
+a.append(4)
+print(a)
 
 
 

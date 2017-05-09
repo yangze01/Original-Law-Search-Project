@@ -269,40 +269,40 @@ if __name__ == "__main__":
     # with open(candidate_file_path, "w+") as f:
     #     f.write(encode_json)
     # print("seg countnum_word_in_sen_filepath saved as {}".format(candidate_file_path))
-
-
-    # # 挑选高频词对，小于2的抛弃
-    # candidate_file_path = BasePath + "/data/candidate_word_pair.txt"
-    # with open(candidate_file_path, "r+") as f:
-    #     jsondata = f.read()
-    #     candidate_high_frequence_dict = json.loads(jsondata)
-    # print("the len of candidate_word_pair is: {}".format(len(candidate_high_frequence_dict)))
-    # i = 1
-    # for key,value in candidate_high_frequence_dict.items():
-    #     print(i)
-    #     i += 1
-    #     # if(value>=2):
-    #     #     print(i)
-    #     #     i = i + 1
-    #     #     print(value)
-    #     if value < 2:
-    #         del candidate_high_frequence_dict[key]
-    #         # candidate_high_frequence_dict
     #
-    # # 保存高频词对
-    # candidate_high_freqence_file_path = BasePath + "/data/high_frequence_word_pair.txt"
-    #
-    # encode_json = json.dumps(candidate_high_frequence_dict, ensure_ascii=False)
-    # with open(candidate_high_freqence_file_path, "w+") as f:
-    #     f.write(encode_json)
-    # print("high_frequence_word_pair saved as {}".format(candidate_high_freqence_file_path))
-    # print("the len of the high_frequence word pair is : {}".format(len(candidate_high_frequence_dict)))
+
+    # 挑选高频词对，小于2的抛弃
+    candidate_file_path = BasePath + "/data/candidate_word_pair.txt"
+    with open(candidate_file_path, "r+") as f:
+        jsondata = f.read()
+        candidate_high_frequence_dict = json.loads(jsondata)
+    print("the len of candidate_word_pair is: {}".format(len(candidate_high_frequence_dict)))
+    i = 1
+    for key,value in candidate_high_frequence_dict.items():
+        print(i)
+        i += 1
+        # if(value>=2):
+        #     print(i)
+        #     i = i + 1
+        #     print(value)
+        if value < 5:
+            del candidate_high_frequence_dict[key]
+            # candidate_high_frequence_dict
+
+    # 保存高频词对
+    candidate_high_freqence_file_path = BasePath + "/data/high_frequence_word_pair_5.txt"
+
+    encode_json = json.dumps(candidate_high_frequence_dict, ensure_ascii=False)
+    with open(candidate_high_freqence_file_path, "w+") as f:
+        f.write(encode_json)
+    print("high_frequence_word_pair saved as {}".format(candidate_high_freqence_file_path))
+    print("the len of the high_frequence word pair is : {}".format(len(candidate_high_frequence_dict)))
 
 
 
     # 对高频词对统计11 10 01
     # 加载高频词对 (id1, id2) = count(11)
-    candidate_high_freqence_file_path = BasePath + "/data/high_frequence_word_pair.txt"
+    candidate_high_freqence_file_path = BasePath + "/data/high_frequence_word_pair_5.txt"
     with open(candidate_high_freqence_file_path, "r+") as f:
         jsondata = f.read()
         candidate_high_frequence_dict = json.loads(jsondata)
@@ -318,7 +318,9 @@ if __name__ == "__main__":
     sen_size = 247744
     i = 1
     for key,value in candidate_high_frequence_dict.items():
-        print(i)
+
+        if(i%1000 == 0):
+            print(i)
         i += 1
         id_list = key[1:-1].split(', ')
         w_1_1 = len(set(word_in_sen_dict[str(id_list[0])]))
@@ -331,13 +333,13 @@ if __name__ == "__main__":
         # print(nmi)
         candidate_high_frequence_dict[key] = [value, nmi]
     # 保存高频词统计量
-    candidate_high_freqence_count_file_path = BasePath + "/data/high_frequence_word_count_pair.txt"
+    candidate_high_freqence_count_file_path = BasePath + "/data/high_frequence_word_count_pair_5.txt"
     encode_json = json.dumps(candidate_high_frequence_dict, ensure_ascii=False)
     with open(candidate_high_freqence_count_file_path, "w+") as f:
         f.write(encode_json)
     print("high_frequence_word_pair saved as {}".format(candidate_high_freqence_count_file_path))
     #
-    candidate_high_freqence_count_file_path = BasePath + "/data/high_frequence_word_count_pair.txt"
+    candidate_high_freqence_count_file_path = BasePath + "/data/high_frequence_word_count_pair_5.txt"
 
 
 
