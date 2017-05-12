@@ -107,7 +107,7 @@ print(b_decode)
 #         print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
 #         j += 1
 #     break
-#
+
 # # for i in a_decode:
 # #     print(i)
 # # print(type(a_decode))
@@ -122,7 +122,7 @@ print(b_decode)
 # # d = OrderedDict(sorted(d.items(),key = lambda t:t[0]))
 # # e = {key:value for key,value in d.items()}
 # # print(d)
-#
+
 # a = set()
 # a.add(1)
 # a.add(2)
@@ -153,10 +153,7 @@ num_dict[3] = 'c'
 
 # print(num_dict)
 from itertools import combinations,product
-
+import numpy as np
 a = [1,2,3]
-a.append(4)
-print(a)
-
-
-
+b = np.array(a)/3
+print(b)

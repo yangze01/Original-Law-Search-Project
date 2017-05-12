@@ -6,7 +6,7 @@ mpl.rcParams['font.sans-serif'] = ['FangSong']
 mpl.rcParams['axes.unicode_minus'] = False
 import heapq
 # from key_get import *
-# from data_helper import *
+from data_helper import *
 from gensim import corpora, models, similarities
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -31,15 +31,14 @@ import pickle
 # load model and others
 fv_Word2Vec = BasePath + "/word2vec_model/fv_Word2Vec"#_test_min_count5"
 w2v_model = gensim.models.Word2Vec.load(fv_Word2Vec)
-w2v_model_min_count5 = gensim.models.Word2Vec.load(fv_Word2Vec + "_test_min_count5")
 # id索引
 document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
 print("load document index finished, the length is : {}".format(len(document_all_id_list)))
 # 语料向量
-x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
-print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_average.txt"))
+x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")#_test_min_count5.txt")
+print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_average_test_min_count5.txt"))
 # 随机森林训练
-clf_filepath = BasePath + "/data/clf_model_average.m"
+clf_filepath = BasePath + "/data/clf_model_average.m"#_test_min_count5.m"
 if os.path.exists(clf_filepath):
     print("the model already exists in :{}".format(clf_filepath))
     clf = joblib.load(clf_filepath)
@@ -175,7 +174,7 @@ def sentences2docvec(model, sentences, vec_type = "average"):
         # tmp_num = tmp_num/len_word
         corpus_vec.append(tmp_num)
         i = i + 1
-    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_" + vec_type + ".txt", np.array(corpus_vec))
+    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_" + vec_type + "_test_min_count5.txt", np.array(corpus_vec))
 
 
 def load_model():
@@ -270,7 +269,7 @@ def get_keywords(seg_sentence):
     return_word_list = list()
     for word in set(seg_sentence):
         try:
-            word_tuple_list = w2v_model_min_count5.most_similar(word.decode('utf8'), topn=5)
+            word_tuple_list = w2v_model.most_similar(word.decode('utf8'), topn=5)
 
             word_dict_list = [{'word' : word_tuple[0].encode('utf8'),
                                'cluster' : word.encode('utf8')} for word_tuple in word_tuple_list]
@@ -335,7 +334,7 @@ if __name__ == "__main__":
     # # document_all_id_list = [int(i) for i in np.loadtxt(BasePath + "/data/document_index.txt")]
     # document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
     # print("load document index finished, the length is : {}".format(len(document_all_id_list)))
-    #
+
     # # print(document_all_id_list)
     # # print(len(document_all_id_list))
     # # content_all_list, result_all_list = fetch_all_content_result(document_list)
@@ -419,14 +418,14 @@ if __name__ == "__main__":
 
 
 
-    # num_topics = 100
+
     # dev_sample_percentage = .3
     # filepath_list = [BasePath + "/data/judgment" + str(i) + "wordforword2vec" + ".txt" for i in range(1,8)]
     # x_data, y_data = read_seg_document_list(filepath_list)
     # corpus2word2vec(x_data)
     #
     #
-    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt")
+    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average_test_min_count5.txt")
     # # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
     # # print(x_sample[-1].shape)
     # x_sample = Imputer().fit_transform(x_sample)
@@ -438,7 +437,7 @@ if __name__ == "__main__":
     #
     #
     # # 随机森林训练
-    # clf_filepath = BasePath + "/data/clf_model_minmax.m"
+    # clf_filepath = BasePath + "/data/clf_model_test_min_count5.m"
     # if os.path.exists(clf_filepath):
     #     print("the model already exists.")
     #     clf = joblib.load(clf_filepath)
@@ -458,17 +457,17 @@ if __name__ == "__main__":
     # print("精度为：")
     # print(acc)
     #
-    # # 输出决策树路径
-    # path_of_randomforest, _ = clf.decision_path(x_test)
-    # print(_)
-    # # print("path of randomforest")
+    # # # 输出决策树路径
+    # # path_of_randomforest, _ = clf.decision_path(x_test)
+    # # print(_)
+    # # # print("path of randomforest")
+    # # # print(path_of_randomforest.toarray())
+    # # print("sim matrix")
+    # # print(path_of_randomforest)
     # # print(path_of_randomforest.toarray())
-    # print("sim matrix")
-    # print(path_of_randomforest)
-    # print(path_of_randomforest.toarray())
-    # sim_matrix = rf_similarity(path_of_randomforest.toarray())
-    # print("end sim matrix")
-    # print(sim_matrix)
+    # # sim_matrix = rf_similarity(path_of_randomforest.toarray())
+    # # print("end sim matrix")
+    # # print(sim_matrix)
     #
     # #输出混淆矩阵
     # cm = confusion_matrix(y_test, clf_pre)

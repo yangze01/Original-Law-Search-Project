@@ -11,6 +11,7 @@ import pickle
 from data_helper import *
 from Segment.MySegment import *
 from Segment.MyPosTag import *
+import math
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
 # from __future__ import division
@@ -147,12 +148,16 @@ def save_corpus():
     myseg.close()
 
 def nmi_get(cij, ci, cj, count_sen):
+    # nmi = nmi_get([value, l_10, l_01], w_1_1, w_2_1, sen_size)
     nmi_list = []
-    cij.append(sen_size - value - l_10 - l_01)
+    cij.append(count_sen - cij[0] - cij[1] - cij[2])
     pij = np.array(cij) / count_sen
     pi = ci / count_sen
     pj = cj / count_sen
     for i in range(0, 4):
+        if (pij[i] == 0):
+            nmi_list.append(0)
+            continue
         if i == 0:
             nmi_list.append(pij[i]*np.log2(pij[i]/(pi*pj)))
         elif i == 1:
@@ -190,11 +195,11 @@ if __name__ == "__main__":
 
 
 
-   # # 统计每个单词出现的句子
-   #  count_word_in_sen_dict = dict()
-   #  bag_sen_dict = load_bag_corpus() #从0开始
-   #  print(len(bag_sen_dict))
-   #
+   # 统计每个单词出现的句子
+    count_word_in_sen_dict = dict()
+    bag_sen_dict = load_bag_corpus() #从0开始
+    print(len(bag_sen_dict))
+
    #  for i in range(1, len(bag_sen_dict)+1):
    #      # print("+++++++++++++++++++++++++++")
    #      # print(i)
@@ -271,33 +276,34 @@ if __name__ == "__main__":
     # print("seg countnum_word_in_sen_filepath saved as {}".format(candidate_file_path))
     #
 
-    # 挑选高频词对，小于2的抛弃
-    candidate_file_path = BasePath + "/data/candidate_word_pair.txt"
-    with open(candidate_file_path, "r+") as f:
-        jsondata = f.read()
-        candidate_high_frequence_dict = json.loads(jsondata)
-    print("the len of candidate_word_pair is: {}".format(len(candidate_high_frequence_dict)))
-    i = 1
-    for key,value in candidate_high_frequence_dict.items():
-        print(i)
-        i += 1
-        # if(value>=2):
-        #     print(i)
-        #     i = i + 1
-        #     print(value)
-        if value < 5:
-            del candidate_high_frequence_dict[key]
-            # candidate_high_frequence_dict
-
-    # 保存高频词对
-    candidate_high_freqence_file_path = BasePath + "/data/high_frequence_word_pair_5.txt"
-
-    encode_json = json.dumps(candidate_high_frequence_dict, ensure_ascii=False)
-    with open(candidate_high_freqence_file_path, "w+") as f:
-        f.write(encode_json)
-    print("high_frequence_word_pair saved as {}".format(candidate_high_freqence_file_path))
-    print("the len of the high_frequence word pair is : {}".format(len(candidate_high_frequence_dict)))
-
+    # # 挑选高频词对，小于2的抛弃
+    # candidate_file_path = BasePath + "/data/candidate_word_pair.txt"
+    # with open(candidate_file_path, "r+") as f:
+    #     jsondata = f.read()
+    #     candidate_high_frequence_dict = json.loads(jsondata)
+    # print("the len of candidate_word_pair is: {}".format(len(candidate_high_frequence_dict)))
+    # i = 1
+    # for key,value in candidate_high_frequence_dict.items():
+    #     print(i)
+    #     i += 1
+    #     # if(value>=2):
+    #     #     print(i)
+    #     #     i = i + 1
+    #     #     print(value)
+    #     if value < 5:
+    #         del candidate_high_frequence_dict[key]
+    #         # candidate_high_frequence_dict
+    #
+    # # 保存高频词对
+    # candidate_high_freqence_file_path = BasePath + "/data/high_frequence_word_pair_5.txt"
+    #
+    # encode_json = json.dumps(candidate_high_frequence_dict, ensure_ascii=False)
+    # with open(candidate_high_freqence_file_path, "w+") as f:
+    #     f.write(encode_json)
+    # print("high_frequence_word_pair saved as {}".format(candidate_high_freqence_file_path))
+    # print("the len of the high_frequence word pair is : {}".format(len(candidate_high_frequence_dict)))
+    #
+    # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 
     # 对高频词对统计11 10 01
@@ -315,9 +321,11 @@ if __name__ == "__main__":
         word_in_sen_dict = json.loads(jsondata)
     print("the len of word_in_sen_dict is: {}".format(len(word_in_sen_dict)))
     # 统计高频词的相关统计量，并转换为 (w1, w2) = [count(11), count(10), count(01)]
-    sen_size = 247744
+    sen_size = 858277
     i = 1
     for key,value in candidate_high_frequence_dict.items():
+        if(value == 0):
+            print(key, value)
 
         if(i%1000 == 0):
             print(i)
@@ -330,7 +338,12 @@ if __name__ == "__main__":
         l_01 = len(set(word_in_sen_dict[str(id_list[1])]) - set(word_in_sen_dict[str(id_list[0])]))
 
         nmi = nmi_get([value, l_10, l_01], w_1_1, w_2_1, sen_size)
-        # print(nmi)
+        if(math.isnan(nmi)):
+            print(value, l_10, l_01, sen_size - value - l_10 - l_01, w_1_1, w_2_1)
+            # print(key, value, nmi)
+            del candidate_high_frequence_dict[key]
+            continue
+
         candidate_high_frequence_dict[key] = [value, nmi]
     # 保存高频词统计量
     candidate_high_freqence_count_file_path = BasePath + "/data/high_frequence_word_count_pair_5.txt"
@@ -341,5 +354,49 @@ if __name__ == "__main__":
     #
     candidate_high_freqence_count_file_path = BasePath + "/data/high_frequence_word_count_pair_5.txt"
 
+
+
+
+    # test数据统计
+    sen_word_corpus = load_seg_document(BasePath + "/data/sen_word_corpus" + ".txt")
+    dictionary = make_dictionary(sen_word_corpus)
+    print(dictionary[375])
+    # id2token = {value: key for key, value in dictionary.items()}
+    # print(id2token)
+    for key,value in dictionary.items()[0:10]:
+        print(key)
+        print(value)
+    import csv
+    csvfile1 = file(BasePath + '/csv_tuple.csv', 'wb')
+    writer1 = csv.writer(csvfile1)
+    writer1.writerow(['w1','w2','count','pmi'])
+
+    csvfile2 = file(BasePath + '/csv_dict.csv', 'wb')
+    writer2 = csv.writer(csvfile2)
+    writer2.writerow(['id', 'token'])
+
+    candidate_high_freqence_file_path = BasePath + "/data/high_frequence_word_count_pair_5.txt"
+    with open(candidate_high_freqence_file_path, "r+") as f:
+        jsondata = f.read()
+        candidate_high_frequence_dict = json.loads(jsondata)
+        # print(candidate_high_frequence_dict)
+    print("the len of candidate_high_frequence_dict is: {}".format(len(candidate_high_frequence_dict)))
+    data = list()
+    id_all_list = list()
+    for key,value in candidate_high_frequence_dict.items()[0:100]:
+        print(key, value)
+        id_list = key[1:-1].split(', ')
+        id_all_list += id_list
+        data.append((id_list[0], id_list[1], value[0], value[1]))
+    writer1.writerows(data)
+    csvfile1.close()
+
+
+    save_dict = list()
+    for i in id_all_list:
+        print(i, dictionary[int(i)])
+        save_dict.append((i, dictionary[int(i)]))
+    writer2.writerows(save_dict)
+    csvfile2.close()
 
 
