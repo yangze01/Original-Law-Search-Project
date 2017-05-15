@@ -83,7 +83,7 @@ def seg_documentforword2vec(document_list):
     myseg.close()
     mypos.close()
     print("----------------------------------------------")
-    return content_list,result_list
+    return content_list, result_list
 
 
 def save_seg_document(content_list,result_list, i):
@@ -115,27 +115,27 @@ if __name__ == "__main__":
 
 
     criminal_list = [u"交通肇事罪",
-                     u"过失致人死亡罪",
-                     u"故意杀人罪",
-                     u"故意伤害罪",
-                     u"抢劫罪",
-                     u"电信诈骗罪",
-                     u"拐卖妇女儿童罪"]
+                     # u"过失致人死亡罪",
+                     # u"故意杀人罪",
+                     # u"故意伤害罪",
+                     # u"抢劫罪",
+                     u"诈骗罪"]#,
+                     # u"拐卖妇女儿童罪"]
 
     myseg = MySegment()
-    word_list = myseg.sen2word('刘冉等诈骗二审刑事裁定书'.encode('utf8'))
+    word_list = myseg.sen2word('李纯会过失致人死亡一案减刑刑事裁定书 '.encode('utf8'))
     print(' '.join(word_list))
     # print(word_list)
 
-    # opt = DocumentsOnMysql() #
-    # doucment_id_list, document_list = get_criminal_data(opt, criminal_list[0])
 
-    # content_list, result_list = seg_document(document_list)
+
+    # opt = DocumentsOnMysql() #
+    # doucment_id_list, document_list = get_criminal_data(opt, criminal_list[1])
     # content_list, result_list = seg_documentforword2vec(document_list)
     # print(len(content_list))
-    # save_seg_document(content_list, result_list, 1)
-
+    # save_seg_document(content_list, result_list, '_show_1_')
     # opt.connClose()
+
 
     # content, result = content_resultforword2vec(myseg, opt.getById(11151)[5])
     # print(' '.join(content))

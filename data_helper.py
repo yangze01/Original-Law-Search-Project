@@ -45,7 +45,8 @@ def get_criminal_data(opt_Documents, crim):
     print("in segment")
     for it in iter:
         document_id_list.append(it[0])
-        document_list.append(it[5])
+        # print(it[25])
+        document_list.append(it[25])
 
     return document_id_list, document_list
 

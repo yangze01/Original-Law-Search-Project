@@ -5,6 +5,8 @@ import sys
 import json
 from optOnMysql.optOnMysql import *#
 from Segment.MySegment import *
+import jieba.analyse
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 BasePath = sys.path[0]
@@ -26,7 +28,7 @@ def get_prosecutor(document):
 
 def get_prosecutor_detail(document):
     pattern_person = re.compile(u"(原告|原告人|起诉方|公诉机关).*?\。")
-    search_result = re.search(pattern_person, document)#research-->find???
+    search_result = re.search(pattern_person, document) # research-->find???
     if search_result:
         return search_result.group(),1
     else:
@@ -35,16 +37,16 @@ def get_prosecutor_detail(document):
 
 def get_appellee(document):
     pattern_person = re.compile(u"(被告人）|被诉方）|罪犯）|被告人|被诉方|罪犯)(.*?)(，|。)")
-    search_result = re.search(pattern_person, document)#research-->find???
+    search_result = re.search(pattern_person, document) #research-->find???
     if search_result:
-        return search_result.group(2),1
+        return search_result.group(2), 1
     else:
         return "unclear",0
         # return "", 0
 
 def get_appellee_detail(document):
     pattern_person = re.compile(u"(被告人|被诉方|罪犯).*?\。")
-    search_result = re.search(pattern_person, document)#research-->find???
+    search_result = re.search(pattern_person, document) #research-->find???
     if search_result:
         return search_result.group(),1
     else:
@@ -55,7 +57,7 @@ def get_reason(document):
     pattern_character = re.compile(u"(危险驾驶|交通肇事|诈骗|非法拘禁|故意杀人)")
     search_result = re.search(pattern_character, document)
     if search_result:
-        return search_result.group(),1
+        return search_result.group(), 1
     else:
         return "empty",0
         # return "", 0
@@ -101,6 +103,7 @@ def	get_recorder(document):
     else:
         return "empty",0
 	    # return "", 0
+
 def get_inquisition(document):
     pattern_details = re.compile(u"(.*)(201|199|200)(.*?)(现已审理终结|已审理|审理终结)(.*?)\。")
     search_result = re.search(pattern_details, document)
@@ -116,7 +119,8 @@ def get_behavior(document):
     if search_result:
         return search_result.group(1)+search_result.group(2),1
     else:
-        return "empty",0
+        # return "empty",0
+        return document[0:3*200], 0
 
 def get_confession_of_defense(document):
     pattern_behavior = re.compile(u"(被告人供诉与辩解|被告人供诉|被告人辩解|被告供诉与辩解|被告辩解|被告供诉).*?\。")
@@ -223,7 +227,14 @@ def get_abstract(content, document):
 
 
 if __name__ == "__main__":
-    file_path = BasePath + "/data/judgment_scam.txt"
+    filepath_list = [BasePath + "/data/judgment.txt", \
+                     BasePath + "/data/judgment_Death_by_obsolescence.txt", \
+                     BasePath + "/data/judgment_kill.txt", \
+                     BasePath + "/data/judgment_negligence_caused_serious_injury.txt", \
+                     BasePath + "/data/judgment_robbery.txt", \
+                     BasePath + "/data/judgment_scam.txt", \
+                     BasePath + "/data/judgment_trafficking.txt"]
+    file_path = filepath_list[0] # BasePath + "/data/judgment_scam.txt"
     count_total = 0
     document_list = read_document(file_path)
     i = 0
@@ -313,6 +324,10 @@ if __name__ == "__main__":
             doc, count = get_details(document1)
             count_total += count
             save_dict['details'] = doc # longtext
+            key_word_tfidf = jieba.analyse.extract_tags(doc, topK=10, withWeight=False,
+                                                        allowPOS=('ns', 'n', 'vn', 'v'))
+            key_words = ',' + ','.join(key_word_tfidf) + ','
+            save_dict['keywords'] = key_words  # varchar(10000)
             save_dict['abstract'] = get_abstract(doc, document1) # varchar(2000)
 
             #裁判理由
@@ -339,13 +354,14 @@ if __name__ == "__main__":
             # 正文
             save_dict['content'] = document # longtext
             # 罪名
-            save_dict['criminal'] = "诈骗罪".encode('utf8') # varchar(2000)
-            save_dict['keywords'] = "" # varchar(10000)
+            save_dict['criminal'] = "交通肇事罪".encode('utf8') # varchar(2000)
+
             # COLstr1 = ''
             # ROWstr1 = ''
             # print(count_total)
             title_word_list = myseg.sen2word(dit_line['title'].encode('utf8'))
-            if count_total > 12 and ('诈骗' in set(title_word_list) or '诈骗罪' in set(title_word_list)):
+            # if count_total > 12 and ('交通' in set(title_word_list) or '交通' in set(title_word_list)):
+            if '交通' in set(title_word_list) or '交通' in set(title_word_list):
                 print(i)
                 i = i + 1
                 COLstr = list()

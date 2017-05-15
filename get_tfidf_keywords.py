@@ -11,7 +11,7 @@ from optOnMysql.DocumentsOnMysql import *
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 import sys
 BasePath = sys.path[0]
-
+import jieba.analyse
 def make_dictionary(seg_corpus,index):
     '''
     :param seg_corpus: 分好词的文本数据
@@ -145,13 +145,17 @@ if __name__ == "__main__":
     # print("document_id_list len is ： {}".format(len(document_id_list)))
     # print("document_id_list len is ： {}".format(len(seg_document)))
 
-    for id in range(4911,11152):
+    for id in range(1,515):
         print(id)
         it = opt_document.getById(id)
-        content = ' '.join(it[5].split('|'))
-        abstract = content[content.find('。')+1:content.find('。',content.find('。')+200)+1]
+        # print(it[21])
+        key_word_tfidf = jieba.analyse.extract_tags(it[21], topK=10, withWeight=False,
+                                                    allowPOS=('ns', 'n', 'vn', 'v'))
+        key_words = ',' + ','.join(key_word_tfidf) + ','
+        # content = ' '.join(it[5].split('|'))
+        # abstract = content[content.find('。')+1:content.find('。',content.find('。')+200)+1]
         # print(abstract)
-        opt_connect.exeUpdate("update document set abstract = '{0}' where _id = '{1}'".format(abstract, id))
+        opt_connect.exeUpdate("update document set keywords = '{0}' where _id = '{1}'".format(key_words, id))
     opt_document.connClose()
 
     # corpus_dictionary = make_dictionary(seg_document, index)

@@ -10,6 +10,7 @@ import heapq
 from gensim import corpora, models, similarities
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from optOnMysql.DocumentsOnMysql import *
 from sklearn.externals import joblib
 import numpy as np
 from Segment import MyPosTag
@@ -33,11 +34,15 @@ fv_Word2Vec = BasePath + "/word2vec_model/fv_Word2Vec"#_test_min_count5"
 w2v_model = gensim.models.Word2Vec.load(fv_Word2Vec)
 w2v_model_min_count5 = gensim.models.Word2Vec.load(fv_Word2Vec + "_test_min_count5")
 # id索引
-document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
+# document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
+document_all_id_list = np.loadtxt(BasePath + "/data/document_index_show.txt")
+
 print("load document index finished, the length is : {}".format(len(document_all_id_list)))
-# 语料向量
-x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
+## 语料向量
+# x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
+x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average_show.txt")
 print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_average.txt"))
+
 # 随机森林训练
 clf_filepath = BasePath + "/data/clf_model_average.m"
 if os.path.exists(clf_filepath):
@@ -310,7 +315,7 @@ if __name__ == "__main__":
             print("document id {}".format(json_obj['id']))
             # print('\n'.join(document_list[document_tuple[0]].split('|')))
             # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-            print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
+            print('\n'.join(opt_Document.getById(json_obj['id'])[25].split('|')))
             j += 1
 
 

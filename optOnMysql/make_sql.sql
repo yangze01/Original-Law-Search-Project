@@ -6,7 +6,7 @@ create table document(
   type varchar(200),
   case_reason varchar(200),
   date date,
-  judge varchar(2000),
+  judge longtext,
   case_level varchar(200),
   prosecutor varchar(200),
   appellee varchar(200),
