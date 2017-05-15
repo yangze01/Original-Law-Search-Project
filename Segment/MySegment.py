@@ -71,9 +71,11 @@ class MySegment(object):
     def __init__(self):
         self.model = BasePath + '/ltp_data/cws.model'
         self.lexicon = 'lexi.model'
+
         self.segmentor = Segmentor()
         self.segmentor.load(self.model)
-
+        # self.segmentor.load_with_lexicon(self.model, BasePath + '/Segment/criminal.txt')  # 加载模型，第二个参数是您的外部词典文件路径
+        # print(BasePath + '/Segment/criminal.txt')
     def load_default_model(self):
         self.segmentor.load(self.model)
 
@@ -136,7 +138,7 @@ if __name__ == "__main__":
     print(1)
     # file_path = BasePath + "/data/stop_word.txt"
     #
-    # myseg = MySegment()
+    myseg = MySegment()
     # sen_list = myseg.paraph2sen(new_tuple[2])
     # wordlist = myseg.senlist2word(sen_list)
     #
