@@ -10,7 +10,7 @@ class OptOnMysql(object):
         self.db_host = "localhost"
         self.db_user = "root"
         self.db_passowrd = "123"
-        self.db_name = "test_judgment"
+        self.db_name = "judgment"
         try:
             self.conn = pymysql.connect(host=self.db_host,user=self.db_user,passwd=self.db_passowrd,db=self.db_name,charset='utf8')
             self.cur = self.conn.cursor()

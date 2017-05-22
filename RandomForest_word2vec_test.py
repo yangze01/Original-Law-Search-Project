@@ -278,6 +278,7 @@ def get_keywords(seg_sentence):
         except:
             continue
     return return_word_list
+
 def impl_sim(search_type, sentence):
     seg_sentence = myseg.sen2word(sentence.encode('utf8'))
 
@@ -425,10 +426,12 @@ if __name__ == "__main__":
                      # u"拐卖妇女儿童罪"]
 
     document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
+    print(len(document_all_id_list))
     np.savetxt(BasePath + "/data/document_index_show.txt", np.array(document_all_id_list))
     dev_sample_percentage = .3
     filepath_list = [BasePath + "/data/judgment_show_" + str(i) + "_wordforword2vec" + ".txt" for i in range(0,2)]
     x_data, y_data = read_seg_document_list(filepath_list)
+    print(len(x_data))
     corpus2word2vec(x_data)
 
 

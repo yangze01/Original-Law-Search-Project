@@ -71,6 +71,7 @@ sentence2 = u"李某  拐卖妇女儿童 残疾  自首"
 # # sentence = None
 # # a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence1})
 b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence2})
+# b = requests.post("http://10.168.103.10:5000/test",data={'roomid':1653327,'flag':1})
 # # # b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
 # # # url = "http://0.0.0.0:5000/api_sim?search_type=" + str(1) + "&" + "sentence='%s'"%sentence
 # # # print(url)
@@ -85,28 +86,28 @@ b_decode = json.loads(b.content)
 # # print(a)
 print(b_decode)
 # # print(a_decode)
-# opt_Document = DocumentsOnMysql()
-# while (True):
-#     print("请输入一句话或空格间隔的关键词，回车结束： ")
-#     print(sentence2)
-#     # sentence = raw_input()
-#     document_ret_dict = b_decode
-#     j = 1
-#     for json_obj in document_ret_dict[0:5]:
-#         # print(json_obj['id'])
-#         # print(json_obj)
-#         print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
-#         print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(
-#             json_obj['final_sim']))
-#         print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(
-#             json_obj['vec_sim']))
-#
-#         print("document id {}".format(json_obj['id']))
-#         # print('\n'.join(document_list[document_tuple[0]].split('|')))
-#         # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-#         print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
-#         j += 1
-#     break
+opt_Document = DocumentsOnMysql()
+while (True):
+    print("请输入一句话或空格间隔的关键词，回车结束： ")
+    print(sentence2)
+    # sentence = raw_input()
+    document_ret_dict = b_decode
+    j = 1
+    for json_obj in document_ret_dict:
+        # print(json_obj['id'])
+        # print(json_obj)
+        print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
+        print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(
+            json_obj['final_sim']))
+        print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(
+            json_obj['vec_sim']))
+
+        print("document id {}".format(json_obj['id']))
+        # print('\n'.join(document_list[document_tuple[0]].split('|')))
+        # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
+        j += 1
+    break
 
 # # for i in a_decode:
 # #     print(i)

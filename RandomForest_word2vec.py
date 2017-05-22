@@ -30,17 +30,21 @@ from scipy.sparse.csr import csr_matrix
 import pickle
 
 # load model and others
+
 fv_Word2Vec = BasePath + "/word2vec_model/fv_Word2Vec"#_test_min_count5"
+
 w2v_model = gensim.models.Word2Vec.load(fv_Word2Vec)
+
 w2v_model_min_count5 = gensim.models.Word2Vec.load(fv_Word2Vec + "_test_min_count5")
+
 # id索引
-# document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
-document_all_id_list = np.loadtxt(BasePath + "/data/document_index_show.txt")
+document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
+# document_all_id_list = np.loadtxt(BasePath + "/data/document_index_show.txt")
 
 print("load document index finished, the length is : {}".format(len(document_all_id_list)))
 ## 语料向量
-# x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
-x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average_show.txt")
+x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
+# x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average_show.txt")
 print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_average.txt"))
 
 # 随机森林训练
@@ -284,15 +288,15 @@ def get_keywords(seg_sentence):
         except:
             continue
     return return_word_list
+
 def impl_sim(search_type, sentence):
+
     seg_sentence = myseg.sen2word(sentence.encode('utf8'))
 
     # for word in set(seg_sentence):
     # for word in set(sentence):
+
     return_word_list = get_keywords(seg_sentence)
-
-
-
     document_ret_dict = get_sim_sentence(clf, seg_sentence, x_sample)
     return_json_list = {'keywords':return_word_list,
                         'result':document_ret_dict}
@@ -315,7 +319,7 @@ if __name__ == "__main__":
             print("document id {}".format(json_obj['id']))
             # print('\n'.join(document_list[document_tuple[0]].split('|')))
             # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-            print('\n'.join(opt_Document.getById(json_obj['id'])[25].split('|')))
+            print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
             j += 1
 
 

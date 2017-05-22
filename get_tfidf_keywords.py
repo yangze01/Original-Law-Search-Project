@@ -145,17 +145,19 @@ if __name__ == "__main__":
     # print("document_id_list len is ： {}".format(len(document_id_list)))
     # print("document_id_list len is ： {}".format(len(seg_document)))
 
-    for id in range(1,515):
+    for id in range(0, 11152):
         print(id)
         it = opt_document.getById(id)
+        print()
         # print(it[21])
-        key_word_tfidf = jieba.analyse.extract_tags(it[21], topK=10, withWeight=False,
+        key_word_tfidf = jieba.analyse.extract_tags(it[5], topK=10, withWeight=False,
                                                     allowPOS=('ns', 'n', 'vn', 'v'))
         key_words = ',' + ','.join(key_word_tfidf) + ','
+        print(key_words)
         # content = ' '.join(it[5].split('|'))
         # abstract = content[content.find('。')+1:content.find('。',content.find('。')+200)+1]
         # print(abstract)
-        opt_connect.exeUpdate("update document set keywords = '{0}' where _id = '{1}'".format(key_words, id))
+        # opt_connect.exeUpdate("update document set keywords = '{0}' where _id = '{1}'".format(key_words, id))
     opt_document.connClose()
 
     # corpus_dictionary = make_dictionary(seg_document, index)

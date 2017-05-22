@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="sftp://john@10.108.217.76:22/usr/bin/python" autoUploadExternalChanges="true" showNewOnSourceInSync="false">
+  <component name="PublishConfigData" autoUpload="Always" autoUploadExternalChanges="true" showNewOnSourceInSync="false">
     <serverData>
       <paths name="cetc-len">
         <serverdata>
@@ -20,22 +20,6 @@
         <serverdata>
           <mappings>
             <mapping deploy="/home/john/remote/rebuild_judgment/" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="lab-ubuntu1">
-        <serverdata>
-          <mappings>
-            <mapping local="$USER_HOME$/Desktop/char lstm language model/lstm-char-cnn-tensorflow-master" web="/" />
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="sftp://john@10.108.217.76:22/usr/bin/python">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/home/john/remote/rebuild_judgment" local="$PROJECT_DIR$" />
-            <mapping deploy="/home/john/remote/testcnn" local="$PROJECT_DIR$/../testcnn/" />
           </mappings>
         </serverdata>
       </paths>

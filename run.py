@@ -29,3 +29,7 @@ if __name__ == '__main__':
 	print("begin flask service.")
 	# socketio.run(app, debug=True)
 	app.run(host='0.0.0.0')
+
+
+
+
