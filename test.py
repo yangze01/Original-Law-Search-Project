@@ -70,7 +70,8 @@ import json
 sentence2 = u"李某  拐卖妇女儿童 残疾  自首"
 # # sentence = None
 # # a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence1})
-b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence2})
+# b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence2})
+b = requests.post("http://0.0.0.0:5000/api_relation",data={'word':"交通"})
 # b = requests.post("http://10.168.103.10:5000/test",data={'roomid':1653327,'flag':1})
 # # # b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
 # # # url = "http://0.0.0.0:5000/api_sim?search_type=" + str(1) + "&" + "sentence='%s'"%sentence
@@ -84,8 +85,8 @@ b_decode = json.loads(b.content)
 # # print(a_decode)
 # print(b_decode)
 # # print(a)
-print(b_decode)
-print(b_decode['relation'])
+print(' '.join(b_decode['交通'.decode('utf8')]))
+# print(b_decode['relation'])
 # # print(a_decode)
 opt_Document = DocumentsOnMysql()
 # while (True):
