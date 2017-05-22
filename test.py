@@ -85,29 +85,31 @@ b_decode = json.loads(b.content)
 # print(b_decode)
 # # print(a)
 print(b_decode)
+print(b_decode['relation'])
 # # print(a_decode)
 opt_Document = DocumentsOnMysql()
-while (True):
-    print("请输入一句话或空格间隔的关键词，回车结束： ")
-    print(sentence2)
-    # sentence = raw_input()
-    document_ret_dict = b_decode
-    j = 1
-    for json_obj in document_ret_dict:
-        # print(json_obj['id'])
-        # print(json_obj)
-        print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
-        print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(
-            json_obj['final_sim']))
-        print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(
-            json_obj['vec_sim']))
-
-        print("document id {}".format(json_obj['id']))
-        # print('\n'.join(document_list[document_tuple[0]].split('|')))
-        # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
-        j += 1
-    break
+# while (True):
+#     print("请输入一句话或空格间隔的关键词，回车结束： ")
+#     print(sentence2)
+#     # sentence = raw_input()
+#     document_ret_dict = b_decode
+#     print(document_ret_dict['result'])
+#     j = 1
+#     for json_obj in document_ret_dict['result'][0:5]:
+#         # print(json_obj['id'])
+#         # print(json_obj)
+#         print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
+#         print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(
+#             json_obj['final_sim']))
+#         print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(
+#             json_obj['vec_sim']))
+#
+#         print("document id {}".format(json_obj['id']))
+#         # print('\n'.join(document_list[document_tuple[0]].split('|')))
+#         # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+#         print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
+#         j += 1
+#     break
 
 # # for i in a_decode:
 # #     print(i)

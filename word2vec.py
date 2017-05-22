@@ -16,7 +16,9 @@ def load_model():
     model = gensim.models.Word2Vec.load(fv_Word2Vec)
     return model
 
-
+# def get_w2v_key(word):
+#     word_tuple_list = w2v_model_min_count5.most_similar(word.decode('utf8'), topn=5)
+#     ret_dict = {word:[], 'value':[]}
 
 if __name__ == "__main__":
 
@@ -45,14 +47,19 @@ if __name__ == "__main__":
     # print(' '.join(word_list))
     # print(' '.join(key_word))
 
-
-    result = model2.most_similar('喝酒'.decode('utf8'),topn = 5)
-
-
+    word = '喝酒'
+    result = model2.most_similar(word.decode('utf8'),topn = 5)
+    # ret_word = [wordtuple[0] for wordtuple in result]
+    # print(' '.join(ret_word))
+    # ret_key = [wordtuple[1] for wordtuple in result]
+    ret_dict = {word.decode('utf8'):[wordtuple[0] for wordtuple in result],'value':[wordtuple[1] for wordtuple in result]}
+    print(ret_dict)
+    print(ret_dict[word.decode('utf8')])
     # print(result)
     # print(type(result))
-    for i in result:
-        print(i[0])
+
+    # for i in result:
+    #     print(i[0])
 
 
 

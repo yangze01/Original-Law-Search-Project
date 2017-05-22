@@ -8,6 +8,14 @@ app.secret_key = '!@#$%^&*()'
 app.config['SESSION_TYPE'] = 'filesystem'
 app.debug = True
 
+@app.route('/api_relation', methods=['GET', 'POST'])
+def get_relation_dict():
+	if request.method == 'POST':
+		relation_word = request.form['word']
+	else:
+		relation_word = request.args.get['search_type']
+	relation_ret_dict = get_keywords(relation_word)
+	return jsonify(relation_ret_dict)
 
 @app.route('/api_sim',methods=['GET', 'POST'])
 def get_sim_dict():
