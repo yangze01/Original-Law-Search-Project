@@ -234,7 +234,13 @@ if __name__ == "__main__":
                      BasePath + "/data/judgment_robbery.txt", \
                      BasePath + "/data/judgment_scam.txt", \
                      BasePath + "/data/judgment_trafficking.txt"]
-    file_path = filepath_list[0] # BasePath + "/data/judgment_scam.txt"
+    # criminal_list = ['交通肇事罪',
+    #                  '过失致人死亡罪']
+    file_path = filepath_list[1] # BasePath + "/data/judgment_scam.txt"
+    word1 = '过失'
+    word2 = '过失'
+    criminal_data = "过失致人死亡罪"
+
     count_total = 0
     document_list = read_document(file_path)
     i = 0
@@ -248,6 +254,12 @@ if __name__ == "__main__":
         if(document1):
             save_dict = dict()
             save_dict['title'] = dit_line['title'] # varchar(200)
+            title_word_list = myseg.sen2word(dit_line['title'].encode('utf8'))
+
+            if word1 not in set(title_word_list) and word2 not in set(title_word_list):
+                # print("continue")
+                print(' '.join(title_word_list))
+                continue
             save_dict['court'] = dit_line['court'] # varchar(200)
             save_dict['case_num'] = dit_line['document_code'] # varchar(200)
             save_dict['date'] = dit_line['date']  # date
@@ -354,23 +366,26 @@ if __name__ == "__main__":
             # 正文
             save_dict['content'] = document # longtext
             # 罪名
-            save_dict['criminal'] = "交通肇事罪".encode('utf8') # varchar(2000)
+            save_dict['criminal'] = criminal_data.encode('utf8') # varchar(2000)
 
             # COLstr1 = ''
             # ROWstr1 = ''
             # print(count_total)
-            title_word_list = myseg.sen2word(dit_line['title'].encode('utf8'))
+            # title_word_list = myseg.sen2word(dit_line['title'].encode('utf8'))
             # if count_total > 12 and ('交通' in set(title_word_list) or '交通' in set(title_word_list)):
-            if '交通' in set(title_word_list) or '交通' in set(title_word_list):
+            # if '交通' in set(title_word_list) or '交通' in set(title_word_list):
+            if word1 in set(title_word_list) or word2 in set(title_word_list):
                 print(i)
                 i = i + 1
-                COLstr = list()
-                ROWstr = list()
-                for key in save_dict.keys():
-                    COLstr.append(key)
-                    ROWstr.append('"' + save_dict[key].encode('utf8') + '"')
-                sql = "insert into document ({0}) values ({1})".format(','.join(COLstr), ','.join(ROWstr))
-                opt_connect.exeQuery(sql)
+                # if(i < 7):
+                #     continue
+                # COLstr = list()
+                # ROWstr = list()
+                # for key in save_dict.keys():
+                    # COLstr.append(key)
+                    # ROWstr.append('"' + save_dict[key].encode('utf8') + '"')
+                # sql = "insert into document ({0}) values ({1})".format(','.join(COLstr), ','.join(ROWstr))
+                # opt_connect.exeQuery(sql)
     myseg.close()
     opt_connect.connClose()
 

@@ -123,7 +123,7 @@ if __name__ == "__main__":
                      # u"拐卖妇女儿童罪"]
 
     myseg = MySegment()
-    word_list = myseg.sen2word('李纯会过失致人死亡一案减刑刑事裁定书 '.encode('utf8'))
+    word_list = myseg.sen2word('谢某犯过失致人死亡罪二审刑事判决书 '.encode('utf8'))
     print(' '.join(word_list))
     # print(word_list)
 
