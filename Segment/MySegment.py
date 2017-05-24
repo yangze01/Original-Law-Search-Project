@@ -73,8 +73,8 @@ class MySegment(object):
         self.lexicon = 'lexi.model'
 
         self.segmentor = Segmentor()
-        self.segmentor.load(self.model)
-        # self.segmentor.load_with_lexicon(self.model, BasePath + '/Segment/law_dict.txt')  # 加载模型，第二个参数是您的外部词典文件路径
+        # self.segmentor.load(self.model)
+        self.segmentor.load_with_lexicon(self.model, BasePath + '/Segment/law_dict.txt')  # 加载模型，第二个参数是您的外部词典文件路径
         # self.segmentor.load_with_lexicon(self.model, BasePath + '/Segment/criminal.txt')  # 加载模型，第二个参数是您的外部词典文件路径
         # print(BasePath + '/Segment/criminal.txt')
     def load_default_model(self):

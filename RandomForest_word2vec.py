@@ -275,9 +275,11 @@ def get_sim_sentence(clf_model, seg_sentence, x_sample):
     return document_ret_dict
 
 def get_w2v_key(word):
+    print(word)
     word_tuple_list = w2v_model_min_count5.most_similar(word.decode('utf8'), topn=5)
-    ret_dict = {word.decode('utf8'): [wordtuple[0] for wordtuple in word_tuple_list],
+    ret_dict = {'key': [wordtuple[0] for wordtuple in word_tuple_list],
                 'value': [wordtuple[1] for wordtuple in word_tuple_list]}
+    # print(ret_dict)
     return ret_dict
 
 def get_keywords(seg_sentence):
@@ -288,11 +290,14 @@ def get_keywords(seg_sentence):
         try:
             # word_tuple_list = w2v_model_min_count5.most_similar(word.decode('utf8'), topn=5)
             relation_dict = get_w2v_key(word)
+            # print(relation_dict)
             word_dict_list = [{'word' : key,
-                               'cluster' : word.encode('utf8')} for key in relation_dict[word.decode('utf8')]]
+                               'cluster' : word.encode('utf8')} for key in relation_dict['key']]
             # print(word_dict_list)
             return_word_list += word_dict_list
             return_relation_list.append(relation_dict)
+            # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            # print(return_relation_list)
         except:
             continue
     return return_word_list, return_relation_list

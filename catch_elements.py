@@ -206,12 +206,17 @@ def read_document(file_path):
         line.pop('content')
 
         newline = {}
+        # print(line.items())
+
         for key,value in line.items():
-            #value.decode('utf8')
-            value=''.join(value)
-            value.decode('utf8')
-            newline[key] = value
-            # f.write(decode_line)
+            try:
+                #value.decode('utf8')
+                value=''.join(value)
+                value.decode('utf8')
+                newline[key] = value
+                # f.write(decode_line)
+            except:
+                continue
         return_document.append((decode_line.decode('utf8'), newline))
         
     return return_document
@@ -234,12 +239,20 @@ if __name__ == "__main__":
                      BasePath + "/data/judgment_robbery.txt", \
                      BasePath + "/data/judgment_scam.txt", \
                      BasePath + "/data/judgment_trafficking.txt"]
-    # criminal_list = ['交通肇事罪',
-    #                  '过失致人死亡罪']
-    file_path = filepath_list[1] # BasePath + "/data/judgment_scam.txt"
-    word1 = '过失'
-    word2 = '过失'
-    criminal_data = "过失致人死亡罪"
+    # criminal_list = ['交通肇事罪',  # 危险驾驶罪（危险 驾驶罪）
+    #                  '过失致人死亡罪' # 故意杀人罪（故意 杀人 杀人罪） 故意伤害罪（故意 伤害 伤害罪）
+    #                   '故意杀人罪'
+    #                   '故意伤害罪'
+    #                   '过失致人重伤罪'，
+    #                   ‘抢劫罪’,
+    #                   '诈骗罪', #（诈骗 诈骗罪 诈骗案）
+    #                   '拐卖妇女儿童罪'
+    #                   ]
+    file_path = filepath_list[6] # BasePath + "/data/judgment_scam.txt"
+    word1 = '拐卖'
+    word2 = '拐卖'
+    word3 = '拐卖'
+    criminal_data = "拐卖妇女儿童罪"
 
     count_total = 0
     document_list = read_document(file_path)
@@ -247,8 +260,12 @@ if __name__ == "__main__":
     opt_connect = OptOnMysql()
     myseg = MySegment()
     # test = opt_connect.exeUpdate("update document set keywords = '{0}' where _id = '{1}'".format("测试,插入,数据",1))
-
+    # j = 0
     for (document,dit_line) in document_list:
+        # j += 1
+        # if(i<115):
+        #     continue
+
         count_total = 0
         document1  = document.replace('|','')
         if(document1):
@@ -374,18 +391,21 @@ if __name__ == "__main__":
             # title_word_list = myseg.sen2word(dit_line['title'].encode('utf8'))
             # if count_total > 12 and ('交通' in set(title_word_list) or '交通' in set(title_word_list)):
             # if '交通' in set(title_word_list) or '交通' in set(title_word_list):
-            if word1 in set(title_word_list) or word2 in set(title_word_list):
+            if (word1 in set(title_word_list) and word2 in set(title_word_list)) or (word1 in set(title_word_list) and word3 in set(title_word_list)):
                 print(i)
                 i = i + 1
-                # if(i < 7):
+                # if(i < 127):# 165
                 #     continue
-                # COLstr = list()
-                # ROWstr = list()
-                # for key in save_dict.keys():
-                    # COLstr.append(key)
-                    # ROWstr.append('"' + save_dict[key].encode('utf8') + '"')
-                # sql = "insert into document ({0}) values ({1})".format(','.join(COLstr), ','.join(ROWstr))
-                # opt_connect.exeQuery(sql)
+                COLstr = list()
+                ROWstr = list()
+                for key in save_dict.keys():
+                    COLstr.append(key)
+                    ROWstr.append('"' + save_dict[key].encode('utf8') + '"')
+                try:
+                    sql = "insert into document ({0}) values ({1})".format(','.join(COLstr), ','.join(ROWstr))
+                    opt_connect.exeQuery(sql)
+                except:
+                    continue
     myseg.close()
     opt_connect.connClose()
 
@@ -403,10 +423,6 @@ if __name__ == "__main__":
             # for key, value in save_dict.items():
             #     print(key)
             #     print(value)
-
-
-
-
 
             # with open(BasePath + "/data_make/"+str(i)+".txt",'w') as f:#全部被处理文件保存位置
             #     f.write("[标题]".decode('utf8'))
