@@ -112,29 +112,37 @@ if __name__ == "__main__":
     #                  BasePath + "/data/judgment_robbery.txt", \
     #                  BasePath + "/data/judgment_scam.txt", \
     #                  BasePath + "/data/judgment_trafficking.txt"]
+    criminal_list = ['交通肇事罪',  # 危险驾驶罪（危险 驾驶罪）
+                     '过失致人死亡罪', # 故意杀人罪（故意 杀人 杀人罪） 故意伤害罪（故意 伤害 伤害罪）
+                      '故意杀人罪',
+                      '故意伤害罪',
+                      '过失致人重伤罪',
+                      '抢劫罪',
+                      '诈骗罪', #（诈骗 诈骗罪 诈骗案）
+                      '拐卖妇女儿童罪'
+                      ]
 
+    # criminal_list = [u"交通肇事罪",
+    #                  # u"过失致人死亡罪",
+    #                  # u"故意杀人罪",
+    #                  # u"故意伤害罪",
+    #                  # u"抢劫罪",
+    #                  u"诈骗罪"]#,
+    #                  # u"拐卖妇女儿童罪"]
 
-    criminal_list = [u"交通肇事罪",
-                     # u"过失致人死亡罪",
-                     # u"故意杀人罪",
-                     # u"故意伤害罪",
-                     # u"抢劫罪",
-                     u"诈骗罪"]#,
-                     # u"拐卖妇女儿童罪"]
-
-    myseg = MySegment()
-    word_list = myseg.sen2word('董金凤、董某等犯拐卖妇女、儿童罪崔某、李某乙等犯收买被拐卖的妇女、儿童罪一审刑事判决书      '.encode('utf8'))
-    print(' '.join(word_list))
+    # myseg = MySegment()
+    # word_list = myseg.sen2word('张某酒后驾车逃逸'.encode('utf8'))
+    # print(' '.join(word_list))
     # print(word_list)
 
 
-
-    # opt = DocumentsOnMysql() #
-    # doucment_id_list, document_list = get_criminal_data(opt, criminal_list[1])
-    # content_list, result_list = seg_documentforword2vec(document_list)
-    # print(len(content_list))
-    # save_seg_document(content_list, result_list, '_show_1_')
-    # opt.connClose()
+    i = 8
+    opt = DocumentsOnMysql() #
+    doucment_id_list, document_list = get_criminal_data(opt, criminal_list[i])
+    content_list, result_list = seg_documentforword2vec(document_list)
+    print(len(content_list))
+    save_seg_document(content_list, result_list, 'full_'+str(i)+'_')
+    opt.connClose()
 
 
     # content, result = content_resultforword2vec(myseg, opt.getById(11151)[5])

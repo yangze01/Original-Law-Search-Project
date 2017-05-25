@@ -9,6 +9,7 @@
     <orderEntry type="module" module-name="lstm-char-cnn-tensorflow" />
     <orderEntry type="module" module-name="cnn-lstm-language-model" />
     <orderEntry type="module" module-name="testcnn" />
+    <orderEntry type="module" module-name="test_char_rnn" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />

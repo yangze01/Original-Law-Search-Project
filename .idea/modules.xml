@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/../test-language-model/.idea/cnn-lstm-language-model.iml" filepath="$PROJECT_DIR$/../test-language-model/.idea/cnn-lstm-language-model.iml" />
       <module fileurl="file://$PROJECT_DIR$/../lstm-char-cnn-tensorflow/.idea/lstm-char-cnn-tensorflow.iml" filepath="$PROJECT_DIR$/../lstm-char-cnn-tensorflow/.idea/lstm-char-cnn-tensorflow.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/rebuild_judgment.iml" filepath="$PROJECT_DIR$/.idea/rebuild_judgment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../test_char_rnn/.idea/test_char_rnn.iml" filepath="$PROJECT_DIR$/../test_char_rnn/.idea/test_char_rnn.iml" />
       <module fileurl="file://$PROJECT_DIR$/../testcnn/.idea/testcnn.iml" filepath="$PROJECT_DIR$/../testcnn/.idea/testcnn.iml" />
     </modules>
   </component>

@@ -2,8 +2,13 @@
 import os
 import sys
 from pylab import *
-mpl.rcParams['font.sans-serif'] = ['FangSong']
+import matplotlib as mpl
+# from matplotlib.font_manager import *
+import matplotlib.pyplot as plt
+myfont = mpl.font_manager.FontProperties(fname="/usr/share/fonts/truetype/wqy/wqy-microhei.ttc")
 mpl.rcParams['axes.unicode_minus'] = False
+np.seterr(divide='ignore', invalid='ignore')
+
 import heapq
 # from key_get import *
 # from data_helper import *
@@ -18,8 +23,7 @@ from Segment import MySegment
 import gensim
 import datetime
 from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
-np.seterr(divide='ignore', invalid='ignore')
+
 from sklearn.metrics import confusion_matrix
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -32,23 +36,26 @@ import pickle
 # load model and others
 
 fv_Word2Vec = BasePath + "/word2vec_model/fv_Word2Vec"#_test_min_count5"
-
+#
 w2v_model = gensim.models.Word2Vec.load(fv_Word2Vec)
-
+#
 w2v_model_min_count5 = gensim.models.Word2Vec.load(fv_Word2Vec + "_test_min_count5")
+#
+# # id索引
+document_all_id_list = np.loadtxt(BasePath + "/data/document_full_index.txt")# 8000条数据版本
 
-# id索引
-document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
-# document_all_id_list = np.loadtxt(BasePath + "/data/document_index_show.txt")
-
+# document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")# 11151条数据版本
+# # document_all_id_list = np.loadtxt(BasePath + "/data/document_index_show.txt") #500条数据版本
+#
 print("load document index finished, the length is : {}".format(len(document_all_id_list)))
-## 语料向量
-x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
-# x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average_show.txt")
+# ## 语料向量
+x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_full_average.txt")
+# x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average.txt")
+# # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_average_show.txt")
 print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_average.txt"))
 
 # 随机森林训练
-clf_filepath = BasePath + "/data/clf_model_average.m"
+clf_filepath = BasePath + "/data/clf_model_full_average.m"
 if os.path.exists(clf_filepath):
     print("the model already exists in :{}".format(clf_filepath))
     clf = joblib.load(clf_filepath)
@@ -81,20 +88,29 @@ def plot_confusion_matrix(cm, title = "Confusion matrix", cmap = plt.cm.Blues):
     #             u'抢劫罪',
     #             u'电信诈骗罪',
     #             u'拐卖妇女儿童罪']
-
-    classes = ["crime of causing traffic casualties",
-               "death by misadventure",
-               "offence of intentional killing",
-               "crime of inflicting serious bodily injury",
-               "crime of pillage",
-               "financial fraud",
-               "Crime of abducting and trafficking in women and children"]
+    classes = [       u'交通肇事罪',  # 危险驾驶罪（危险 驾驶罪）
+                      u'过失致人死亡罪', # 故意杀人罪（故意 杀人 杀人罪） 故意伤害罪（故意 伤害 伤害罪）
+                      u'故意杀人罪',
+                      u'故意伤害罪',
+                      u'过失致人重伤罪',
+                      u'抢劫罪',
+                      u'诈骗罪', #（诈骗 诈骗罪 诈骗案）
+                      u'拐卖妇女儿童罪'
+                      ]
+    # classes = ["crime of causing traffic casualties",
+    #            "death by misadventure",
+    #            "offence of intentional killing",
+    #            "crime of inflicting serious bodily injury",
+    #            "inflicting serious injury by misadventure",
+    #            "crime of pillage",
+    #            "financial fraud",
+    #            "Crime of abducting and trafficking in women and children"]
     plt.imshow(cm, interpolation = "nearest", cmap = cmap)
     plt.title(title)
     plt.colorbar()
     tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, rotation = 45)
-    plt.yticks(tick_marks, classes)
+    plt.xticks(tick_marks, classes, rotation = 45, fontproperties=myfont)
+    plt.yticks(tick_marks, classes,fontproperties=myfont)
     plt.tight_layout()
     plt.ylabel("True label")
     plt.xlabel("Predicted label")
@@ -184,7 +200,7 @@ def sentences2docvec(model, sentences, vec_type = "average"):
         # tmp_num = tmp_num/len_word
         corpus_vec.append(tmp_num)
         i = i + 1
-    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_" + vec_type + ".txt", np.array(corpus_vec))
+    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_full_" + vec_type + ".txt", np.array(corpus_vec))
 
 
 def load_model():
@@ -275,7 +291,7 @@ def get_sim_sentence(clf_model, seg_sentence, x_sample):
     return document_ret_dict
 
 def get_w2v_key(word):
-    print(word)
+    # print(word)
     word_tuple_list = w2v_model_min_count5.most_similar(word.decode('utf8'), topn=5)
     ret_dict = {'key': [wordtuple[0] for wordtuple in word_tuple_list],
                 'value': [wordtuple[1] for wordtuple in word_tuple_list]}
@@ -285,21 +301,25 @@ def get_w2v_key(word):
 def get_keywords(seg_sentence):
     print(1)
     return_word_list = list()
-    return_relation_list = list()
+    return_relation_list = dict()
     for word in set(seg_sentence):
         try:
             # word_tuple_list = w2v_model_min_count5.most_similar(word.decode('utf8'), topn=5)
             relation_dict = get_w2v_key(word)
-            # print(relation_dict)
             word_dict_list = [{'word' : key,
                                'cluster' : word.encode('utf8')} for key in relation_dict['key']]
-            # print(word_dict_list)
+
             return_word_list += word_dict_list
-            return_relation_list.append(relation_dict)
-            # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-            # print(return_relation_list)
+            tmp_list = list()
+            for tuple in zip(relation_dict['key'], relation_dict['value']):
+                tmp_list.append({'key':tuple[0], 'value':tuple[1]})
+            return_relation_list[word] = tmp_list
+            # return_relation_list.append({word:relation_dict})
+            # return_relation_list.append({relation_dict})
+
         except:
             continue
+
     return return_word_list, return_relation_list
 
 def impl_sim(search_type, sentence):
@@ -314,6 +334,7 @@ def impl_sim(search_type, sentence):
     return_json_list = {'keywords':return_word_list,
                         'result':document_ret_dict,
                         'relation':return_relation_list}
+    print(return_json_list)
     return return_json_list
 
 if __name__ == "__main__":
@@ -333,9 +354,8 @@ if __name__ == "__main__":
             print("document id {}".format(json_obj['id']))
             # print('\n'.join(document_list[document_tuple[0]].split('|')))
             # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-            print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
+            print('\n'.join(opt_Document.getById(json_obj['id'])[25].split('|')))
             j += 1
-
 
 
 
@@ -344,16 +364,10 @@ if __name__ == "__main__":
 
     # print("----------------------- 加载数据中，请等待..... -----------------------")
     # [1]*1890 + [2]*1980 + [3]*1876 + [4]* 2004 + [5]*1927 + [6]*1214 + 260*[7]
-    # criminal_list = [u'交通肇事罪',
-    #                  u'过失致人死亡罪',
-    #                  u'故意杀人罪',
-    #                  u'故意伤害罪',
-    #                  u'抢劫罪',
-    #                  u'电信诈骗罪',
-    #                  u'拐卖妇女儿童罪']
+
     # opt_Document = DocumentsOnMysql()
-    # # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
-    # # np.savetxt(BasePath + "/data/document_index.txt", np.array(document_all_id_list))
+    # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
+    # np.savetxt(BasePath + "/data/document_index.txt", np.array(document_all_id_list))
     #
     # # document_all_id_list = [int(i) for i in np.loadtxt(BasePath + "/data/document_index.txt")]
     # document_all_id_list = np.loadtxt(BasePath + "/data/document_index.txt")
@@ -436,20 +450,30 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-
-
+    # #
+    # # criminal_list = ['交通肇事罪',  # 危险驾驶罪（危险 驾驶罪）
+    # #                  '过失致人死亡罪',  # 故意杀人罪（故意 杀人 杀人罪） 故意伤害罪（故意 伤害 伤害罪）
+    # #                  '故意杀人罪',
+    # #                  '故意伤害罪',
+    # #                  '过失致人重伤罪',
+    # #                  '抢劫罪',
+    # #                  '诈骗罪',  # （诈骗 诈骗罪 诈骗案）
+    # #                  '拐卖妇女儿童罪'
+    # #                  ]
+    # #
+    # # opt_Document = DocumentsOnMysql()
+    # # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
+    # # np.savetxt(BasePath + "/data/document_full_index.txt", np.array(document_all_id_list))
+    #
+    #
     # num_topics = 100
     # dev_sample_percentage = .3
-    # filepath_list = [BasePath + "/data/judgment" + str(i) + "wordforword2vec" + ".txt" for i in range(1,8)]
+    # filepath_list = [BasePath + "/data/judgment" +"full_" +str(i)+ "_" + "wordforword2vec" + ".txt" for i in range(0,8)]
     # x_data, y_data = read_seg_document_list(filepath_list)
     # corpus2word2vec(x_data)
     #
     #
-    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_minmax.txt")
+    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_full_average.txt")
     # # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
     # # print(x_sample[-1].shape)
     # x_sample = Imputer().fit_transform(x_sample)
@@ -461,7 +485,7 @@ if __name__ == "__main__":
     #
     #
     # # 随机森林训练
-    # clf_filepath = BasePath + "/data/clf_model_minmax.m"
+    # clf_filepath = BasePath + "/data/clf_model_full_average.m"
     # if os.path.exists(clf_filepath):
     #     print("the model already exists.")
     #     clf = joblib.load(clf_filepath)
@@ -481,17 +505,17 @@ if __name__ == "__main__":
     # print("精度为：")
     # print(acc)
     #
-    # # 输出决策树路径
-    # path_of_randomforest, _ = clf.decision_path(x_test)
-    # print(_)
-    # # print("path of randomforest")
+    # # # 输出决策树路径
+    # # path_of_randomforest, _ = clf.decision_path(x_test)
+    # # print(_)
+    # # # print("path of randomforest")
+    # # # print(path_of_randomforest.toarray())
+    # # print("sim matrix")
+    # # print(path_of_randomforest)
     # # print(path_of_randomforest.toarray())
-    # print("sim matrix")
-    # print(path_of_randomforest)
-    # print(path_of_randomforest.toarray())
-    # sim_matrix = rf_similarity(path_of_randomforest.toarray())
-    # print("end sim matrix")
-    # print(sim_matrix)
+    # # sim_matrix = rf_similarity(path_of_randomforest.toarray())
+    # # print("end sim matrix")
+    # # print(sim_matrix)
     #
     # #输出混淆矩阵
     # cm = confusion_matrix(y_test, clf_pre)
