@@ -18,6 +18,7 @@ from sklearn.ensemble import RandomForestClassifier
 from optOnMysql.DocumentsOnMysql import *
 from sklearn.externals import joblib
 import numpy as np
+import sklearn.tree as tree
 from Segment import MyPosTag
 from Segment import MySegment
 import gensim
@@ -529,3 +530,19 @@ if __name__ == "__main__":
     # plt.figure()
     # plot_confusion_matrix(cm_normalized, title = 'Normalized confusion matrix')
     # plt.show()
+    # 保存
+    # dot -Tpng my.dot -o my.png
+    # 1、输出
+
+    # with open('iris.dot', 'w') as f:
+    #     tree.export_graphviz(model, out_file=f)
+    # # 2、给定文件名
+    # # tree.export_graphviz(model, out_file='iris1.dot')
+    # # 3、输出为pdf格式
+    # dot_data = tree.export_graphviz(model, out_file=None, feature_names=iris_feature_E, class_names=iris_class,
+    #                                 filled=True, rounded=True, special_characters=True)
+    # graph = pydotplus.graph_from_dot_data(dot_data)
+    # graph.write_pdf('iris.pdf')
+    # f = open('iris.png', 'wb')
+    # f.write(graph.create_png())
+    # f.close()

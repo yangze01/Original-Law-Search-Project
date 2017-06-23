@@ -353,7 +353,7 @@ if __name__ == "__main__":
     # print("high_frequence_word_pair saved as {}".format(candidate_high_freqence_count_file_path))
     # #
     # candidate_high_freqence_count_file_path = BasePath + "/data/high_frequence_word_count_pair_5.txt"
-
+    #
 
 
 
@@ -394,7 +394,7 @@ if __name__ == "__main__":
 
 
     save_dict = list()
-    for i in id_all_list:
+    for i in set(id_all_list):
         # print(i, dictionary[int(i)])
         # save_dict.append((i, dictionary[int(i)]))
         save_dict.append((dictionary[int(i)], i))
