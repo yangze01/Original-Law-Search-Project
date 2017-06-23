@@ -10,6 +10,10 @@
     <orderEntry type="module" module-name="cnn-lstm-language-model" />
     <orderEntry type="module" module-name="testcnn" />
     <orderEntry type="module" module-name="test_char_rnn" />
+    <orderEntry type="module" module-name="pointer-generator-master" />
+    <orderEntry type="module" module-name="test_textsum" />
+    <orderEntry type="module" module-name="test_textsum" />
+    <orderEntry type="module" module-name="classify" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />

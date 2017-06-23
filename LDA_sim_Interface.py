@@ -117,10 +117,10 @@ def get_sim_sentence(sentence, use_content):
 
 
 if __name__ == "__main__":
-    file_path = BasePath + "/data/judgment_kill.txt"
+    file_path = BasePath + "/data/judgment.txt"
     print("----------------------- 加载数据中，请等待..... -----------------------")
     opt_Document = DocumentsOnMysql()
-    document_all_id_list, document_list = get_criminal_data(opt_Document, u'故意杀人罪')
+    document_all_id_list, document_list = get_criminal_data(opt_Document, u'交通肇事罪')
 
     content_all_list, result_all_list = fetch_all_content_result(document_list)
     # test_content = content_all_list[-1]
