@@ -271,7 +271,7 @@ for dir_name in dir_list:
         count_total = 0
         split_data = data.split('\r\n')
         use_data = split_data[:4]
-        print('|'.join(use_data))
+        # print('|'.join(use_data))
 
         content = split_data[4:]
         # print("|".join(content))
@@ -282,13 +282,16 @@ for dir_name in dir_list:
         save_dict['title'] = use_data[0]
         save_dict['court'] = use_data[1]
         save_dict['case_num'] = use_data[3]
+        save_dict['date'] = '0000-00-00'
         # 案件类型
         doc, count = get_type(save_dict['title'])
+        count_total += count
         save_dict['type'] = doc # varchar(200)
 
         # 案由
         doc, count = get_reason(save_dict['title'])
         count_total += count
+        save_dict['case_reason'] = doc
 
         # 法官
         doc, count = get_judge(document)
@@ -311,8 +314,11 @@ for dir_name in dir_list:
         save_dict['appellee'] = doc  # varchar(200)
 
         # 文书性质
-        doc, count = get_character(document)
-        count_total += count
+        try:
+            doc = use_data[2]
+            count = 1
+        except:
+            count_total += count
         save_dict['case_type'] = doc  # varchar(200)
 
         # 原告信息
@@ -338,6 +344,11 @@ for dir_name in dir_list:
         count_total += count
         save_dict['facts_and_evidence'] = doc # longtext
 
+        # 被告人供诉及辩解
+        doc, count = get_confession_of_defense(document)
+        count_total += count
+        save_dict['confession_of_defense'] = doc  # longtext
+
         # 辩护人意见
         doc, count = get_advocate(document)
         count_total += count
@@ -359,20 +370,41 @@ for dir_name in dir_list:
         count_total += count
         save_dict['judge_reason'] = doc # longtext
 
+        # 裁判结果
+        doc, count = get_result(document)
+        count_total += count
+        save_dict['judgment_result'] = doc
 
+        # 裁判人员
+        doc, count = get_judex(document)
+        count_total += count
+        save_dict['judgment_people'] = doc
 
+        # 书记员
+        doc, count = get_recorder(document)
+        count_total += count
+        save_dict['recoder'] = doc.strip()
 
+        # 正文
+        save_dict['content'] = document
+        # 罪名
+        criminal_data = "诈骗罪"
+        save_dict['criminal'] = criminal_data.encode('utf8')
 
+        # print(len(save_dict))
+        print(i)
+        i = i + 1
+        COLstr = list()
+        ROWstr = list()
+        for key in save_dict.keys():
+            COLstr.append(key)
+            ROWstr.append('"' + save_dict[key].encode('utf8') + '"')
+        try:
+            sql = "insert into document ({0}) values ({1})".format(','.join(COLstr), ','.join(ROWstr))
+            opt_connect.exeQuery(sql)
 
-
-
-
-
-
-
-
-
-
-
-
+        except:
+            continue
+myseg.close()
+opt_connect.connClose()
 
