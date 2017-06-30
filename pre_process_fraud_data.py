@@ -282,7 +282,7 @@ for dir_name in dir_list:
         save_dict['title'] = use_data[0]
         save_dict['court'] = use_data[1]
         save_dict['case_num'] = use_data[3]
-        save_dict['date'] = '0000-00-00'
+        #save_dict['date'] = '0000-00-00'
         # 案件类型
         doc, count = get_type(save_dict['title'])
         count_total += count
@@ -318,7 +318,8 @@ for dir_name in dir_list:
             doc = use_data[2]
             count = 1
         except:
-            count_total += count
+            doc = ''
+            count_total += 1
         save_dict['case_type'] = doc  # varchar(200)
 
         # 原告信息
@@ -392,8 +393,8 @@ for dir_name in dir_list:
         save_dict['criminal'] = criminal_data.encode('utf8')
 
         # print(len(save_dict))
-        print(i)
-        i = i + 1
+        # print(i)
+        # i = i + 1
         COLstr = list()
         ROWstr = list()
         for key in save_dict.keys():
@@ -404,6 +405,7 @@ for dir_name in dir_list:
             opt_connect.exeQuery(sql)
 
         except:
+            print("error")
             continue
 myseg.close()
 opt_connect.connClose()

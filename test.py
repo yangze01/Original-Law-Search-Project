@@ -87,7 +87,7 @@ b_decode = json.loads(b.content)
 # # print(a)
 print(' '.join(b_decode['key']))
 # print(b_decode['relation'])
-# # print(a_decode)
+# # print(a_decode)/home/lenstr/PycharmProjects/rebuild_judgment
 opt_Document = DocumentsOnMysql()
 # while (True):
 #     print("请输入一句话或空格间隔的关键词，回车结束： ")
@@ -107,7 +107,7 @@ opt_Document = DocumentsOnMysql()
 #
 #         print("document id {}".format(json_obj['id']))
 #         # print('\n'.join(document_list[document_tuple[0]].split('|')))
-#         # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+#         # print("~~~~~~~~~~~~~~~~~~/home/lenstr/PycharmProjects/rebuild_judgment~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 #         print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
 #         j += 1
 #     break
