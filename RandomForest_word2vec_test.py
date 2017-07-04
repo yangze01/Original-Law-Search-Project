@@ -201,7 +201,7 @@ def sentences2docvec(model, sentences, vec_type = "average"):
         # tmp_num = tmp_num/len_word
         corpus_vec.append(tmp_num)
         i = i + 1
-    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_full_" + vec_type + ".txt", np.array(corpus_vec))
+    np.savetxt(BasePath + "/word2vec_model/corpus_w2v_full_finance" + vec_type + ".txt", np.array(corpus_vec))
 
 
 def load_model():
@@ -457,59 +457,59 @@ if __name__ == "__main__":
 
 
 
-    # criminal_list = ['交通肇事罪',  # 危险驾驶罪（危险 驾驶罪）
-    #                  '过失致人死亡罪',  # 故意杀人罪（故意 杀人 杀人罪） 故意伤害罪（故意 伤害 伤害罪）
-    #                  '故意杀人罪',
-    #                  '故意伤害罪',
-    #                  '过失致人重伤罪',
-    #                  '抢劫罪',
-    #                  '诈骗罪',  # （诈骗 诈骗罪 诈骗案）
-    #                  '拐卖妇女儿童罪'
-    #                  ]
-    #
-    # opt_Document = DocumentsOnMysql()
-    # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
-    # np.savetxt(BasePath + "/data/document_full_finance_index.txt", np.array(document_all_id_list))
+    criminal_list = ['交通肇事罪',  # 危险驾驶罪（危险 驾驶罪）
+                     '过失致人死亡罪',  # 故意杀人罪（故意 杀人 杀人罪） 故意伤害罪（故意 伤害 伤害罪）
+                     '故意杀人罪',
+                     '故意伤害罪',
+                     '过失致人重伤罪',
+                     '抢劫罪',
+                     '诈骗罪',  # （诈骗 诈骗罪 诈骗案）
+                     '拐卖妇女儿童罪'
+                     ]
+
+    opt_Document = DocumentsOnMysql()
+    document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
+    np.savetxt(BasePath + "/data/document_full_finance_index.txt", np.array(document_all_id_list))
     #
 
     num_topics = 100
     dev_sample_percentage = .3
-    filepath_list = [BasePath + "/data/judgment" +"full_finance_" +str(i)+ "_" + "wordforword2vec" + ".txt" for i in range(0,8)]
+    filepath_list = [BasePath + "/data/judgment" +"full_finance_" +str(i)+ "_" + ".txt" for i in range(0,8)]
     x_data, y_data = read_seg_document_list(filepath_list)
     corpus2word2vec(x_data)
 
 
-    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_full_average.txt")
-    # # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
-    # # print(x_sample[-1].shape)
-    # x_sample = Imputer().fit_transform(x_sample)
-    # # for i in x_sample:
-    # #     print(i)
-    # y_sample = np.array(y_data)
-    # x_train, x_test, y_train, y_test = dev_sample(x_sample, y_sample, dev_sample_percentage)
-    # print("data loaded finished.")
-    #
-    #
-    # # 随机森林训练
-    # clf_filepath = BasePath + "/data/clf_model_full_average.m"
-    # if os.path.exists(clf_filepath):
-    #     print("the model already exists.")
-    #     clf = joblib.load(clf_filepath)
-    # else:
-    #     print("the model doesn't exists.")
-    #     clf = RandomForestClassifier(n_estimators=100, bootstrap = True, oob_score = False , n_jobs = 16)
-    #     clf_model = clf.fit(x_train, y_train)
-    #     joblib.dump(clf, clf_filepath)
-    #
-    # # 评估模型准确率
-    # clf_pre = clf.predict(x_test)
+    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_full_average.txt")
+    # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
+    # print(x_sample[-1].shape)
+    x_sample = Imputer().fit_transform(x_sample)
+    # for i in x_sample:
+    #     print(i)
+    y_sample = np.array(y_data)
+    x_train, x_test, y_train, y_test = dev_sample(x_sample, y_sample, dev_sample_percentage)
+    print("data loaded finished.")
+
+
+    # 随机森林训练
+    clf_filepath = BasePath + "/data/clf_model_full_finance_average.m"
+    if os.path.exists(clf_filepath):
+        print("the model already exists.")
+        clf = joblib.load(clf_filepath)
+    else:
+        print("the model doesn't exists.")
+        clf = RandomForestClassifier(n_estimators=100, bootstrap = True, oob_score = False , n_jobs = 16)
+        clf_model = clf.fit(x_train, y_train)
+        joblib.dump(clf, clf_filepath)
+
+    # 评估模型准确率
+    clf_pre = clf.predict(x_test)
     # print(clf_pre)
     # print(y_test)
     #
-    # # 评估模型准确率
-    # acc = (clf_pre == y_test).mean()
-    # print("精度为：")
-    # print(acc)
+    # 评估模型准确率
+    acc = (clf_pre == y_test).mean()
+    print("精度为：")
+    print(acc)
     #
     # # # 输出决策树路径
     # # path_of_randomforest, _ = clf.decision_path(x_test)
@@ -523,15 +523,15 @@ if __name__ == "__main__":
     # # print("end sim matrix")
     # # print(sim_matrix)
     #
-    # #输出混淆矩阵
-    # cm = confusion_matrix(y_test, clf_pre)
-    # print("Confusion matrix, without normalization")
-    # print(cm)
-    #
-    # # 正则化混淆矩阵
-    # cm_normalized = cm.astype('float') / cm.sum(axis = 1)[:, np.newaxis]
-    # print("Normalized confusion matrix")
-    # print(cm_normalized)
-    # plt.figure()
-    # plot_confusion_matrix(cm_normalized, title = 'Normalized confusion matrix')
-    # plt.show()
+    #输出混淆矩阵
+    cm = confusion_matrix(y_test, clf_pre)
+    print("Confusion matrix, without normalization")
+    print(cm)
+
+    # 正则化混淆矩阵
+    cm_normalized = cm.astype('float') / cm.sum(axis = 1)[:, np.newaxis]
+    print("Normalized confusion matrix")
+    print(cm_normalized)
+    plt.figure()
+    plot_confusion_matrix(cm_normalized, title = 'Normalized confusion matrix')
+    plt.show()
