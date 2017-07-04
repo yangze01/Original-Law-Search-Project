@@ -69,12 +69,13 @@ import json
 # sentence1 = u"解决"
 sentence2 = u"李某  拐卖妇女儿童 残疾  自首"
 # # sentence = None
-# # a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence1})
-# b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence2})
+a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence1})
+b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence2})
 b = requests.post("http://0.0.0.0:5000/api_relation",data={'word':"交通"})
-# b = requests.post("http://10.168.103.10:5000/test",data={'roomid':1653327,'flag':1})
-# # # b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
-# # # url = "http://0.0.0.0:5000/api_sim?search_type=" + str(1) + "&" + "sentence='%s'"%sentence
+b = requests.post("http://10.168.103.10:5000/test",data={'roomid':1653327,'flag':1})
+b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
+
+# # url = "http://0.0.0.0:5000/api_sim?search_type=" + str(1) + "&" + "sentence='%s'"%sentence
 # # # print(url)
 #
 # b = requests.get(url)
@@ -161,3 +162,5 @@ import numpy as np
 a = [1,2,3]
 b = np.array(a)/3
 print(b)
+
+

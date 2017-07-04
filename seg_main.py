@@ -88,7 +88,9 @@ def seg_documentforword2vec(document_list):
 
 def save_seg_document(content_list,result_list, i):
     seg_dict = dict()
-    filepath = BasePath + "/data/judgment" + str(i) + "wordforword2vec" ".txt"
+    # filepath = BasePath + "/data/judgment" + str(i) + "wordforword2vec" ".txt"
+    filepath = BasePath + "/data/judgment" + str(i) + ".txt"
+    print(filepath)
     seg_dict["content"] = content_list
     seg_dict["result"] = result_list
     encode_json = json.dumps(seg_dict, ensure_ascii = False)
@@ -136,26 +138,18 @@ if __name__ == "__main__":
     # print(word_list)
 
 
-    i = 0
-    opt = DocumentsOnMysql() #
-    doucment_id_list, document_list = get_criminal_data(opt, criminal_list[i])
-    content_list, result_list = seg_documentforword2vec(document_list)
-    print(len(content_list))
-    save_seg_document(content_list, result_list, 'full_finance_'+str(i)+'_')
-    opt.connClose()
-
-    #
-
-    # content, result = content_resultforword2vec(myseg, opt.getById(11151)[5])
-    # print(' '.join(content))
-
-
-    # i = 1
-    # for filepath in filepath_list:
-    #     document_list = read_document(filepath)
-    #     content_list, result_list = seg_document(document_list)
-    #     save_seg_document(content_list, result_list, i)
-    #     i += 1
-    # document_list = read_document(filepath_list[3])
+    # i = 0
+    # opt = DocumentsOnMysql() #
+    # doucment_id_list, document_list = get_criminal_data(opt, criminal_list[i])
     # content_list, result_list = seg_documentforword2vec(document_list)
+    # print(len(content_list))
+    # save_seg_document(content_list, result_list, 'full_finance_'+str(i)+'_')
+    # opt.connClose()
 
+    i = 8
+    opt = DocumentsOnMysql()
+    doucment_id_list, document_list = get_criminal_data(opt, criminal_list[i])
+    content_list, result_list = seg_document(document_list)
+    print(len(content_list))
+    save_seg_document(content_list, result_list, 'full_finance_' + str(i) + '_')
+    opt.connClose()
