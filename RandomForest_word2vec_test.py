@@ -105,6 +105,7 @@ def plot_confusion_matrix(cm, title = "Confusion matrix", cmap = plt.cm.Blues):
     #            "crime of pillage",
     #            "financial fraud",
     #            "Crime of abducting and trafficking in women and children"]
+
     plt.imshow(cm, interpolation = "nearest", cmap = cmap)
     plt.title(title)
     plt.colorbar()
@@ -344,25 +345,25 @@ def impl_sim(search_type, sentence):
 
 if __name__ == "__main__":
     # a = 1
-    while(True):
-        print("请输入一句话或空格间隔的关键词，回车结束： ")
-        sentence = raw_input()
-        document_ret_dict = impl_sim(2, sentence)
-        j = 1
-        for json_obj in document_ret_dict['result'][0:5]:
-            # print(json_obj['id'])
-            # print(json_obj)
-            print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
-            print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(json_obj['final_sim']))
-            print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(json_obj['vec_sim']))
-
-            print("document id {}".format(json_obj['id']))
-            # print('\n'.join(document_list[document_tuple[0]].split('|')))
-            # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-            print('\n'.join(opt_Document.getById(json_obj['id'])[25].split('|')))
-            j += 1
-
-
+    # while(True):
+    #     print("请输入一句话或空格间隔的关键词，回车结束： ")
+    #     sentence = raw_input()
+    #     document_ret_dict = impl_sim(2, sentence)
+    #     j = 1
+    #     for json_obj in document_ret_dict['result'][0:5]:
+    #         # print(json_obj['id'])
+    #         # print(json_obj)
+    #         print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
+    #         print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(json_obj['final_sim']))
+    #         print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(json_obj['vec_sim']))
+    #
+    #         print("document id {}".format(json_obj['id']))
+    #         # print('\n'.join(document_list[document_tuple[0]].split('|')))
+    #         # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    #         print('\n'.join(opt_Document.getById(json_obj['id'])[25].split('|')))
+    #         j += 1
+    #
+    #
 
 
 
@@ -455,29 +456,29 @@ if __name__ == "__main__":
 
 
 
-    # #
-    # # criminal_list = ['交通肇事罪',  # 危险驾驶罪（危险 驾驶罪）
-    # #                  '过失致人死亡罪',  # 故意杀人罪（故意 杀人 杀人罪） 故意伤害罪（故意 伤害 伤害罪）
-    # #                  '故意杀人罪',
-    # #                  '故意伤害罪',
-    # #                  '过失致人重伤罪',
-    # #                  '抢劫罪',
-    # #                  '诈骗罪',  # （诈骗 诈骗罪 诈骗案）
-    # #                  '拐卖妇女儿童罪'
-    # #                  ]
-    # #
-    # # opt_Document = DocumentsOnMysql()
-    # # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
-    # # np.savetxt(BasePath + "/data/document_full_index.txt", np.array(document_all_id_list))
+
+    # criminal_list = ['交通肇事罪',  # 危险驾驶罪（危险 驾驶罪）
+    #                  '过失致人死亡罪',  # 故意杀人罪（故意 杀人 杀人罪） 故意伤害罪（故意 伤害 伤害罪）
+    #                  '故意杀人罪',
+    #                  '故意伤害罪',
+    #                  '过失致人重伤罪',
+    #                  '抢劫罪',
+    #                  '诈骗罪',  # （诈骗 诈骗罪 诈骗案）
+    #                  '拐卖妇女儿童罪'
+    #                  ]
     #
+    # opt_Document = DocumentsOnMysql()
+    # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
+    # np.savetxt(BasePath + "/data/document_full_finance_index.txt", np.array(document_all_id_list))
     #
-    # num_topics = 100
-    # dev_sample_percentage = .3
-    # filepath_list = [BasePath + "/data/judgment" +"full_" +str(i)+ "_" + "wordforword2vec" + ".txt" for i in range(0,8)]
-    # x_data, y_data = read_seg_document_list(filepath_list)
-    # corpus2word2vec(x_data)
-    #
-    #
+
+    num_topics = 100
+    dev_sample_percentage = .3
+    filepath_list = [BasePath + "/data/judgment" +"full_finance_" +str(i)+ "_" + "wordforword2vec" + ".txt" for i in range(0,8)]
+    x_data, y_data = read_seg_document_list(filepath_list)
+    corpus2word2vec(x_data)
+
+
     # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_full_average.txt")
     # # x_sample = np.load(BasePath + "/word2vec_model/corpus_w2v_minmax.npy")
     # # print(x_sample[-1].shape)

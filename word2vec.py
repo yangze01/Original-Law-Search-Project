@@ -33,6 +33,7 @@ if __name__ == "__main__":
     # model1.save(fv_Word2Vec)
     #
     model2 = load_model()
+    model2.train()
     print("model reload")
 
     # from optOnMysql.DocumentsOnMysql import *

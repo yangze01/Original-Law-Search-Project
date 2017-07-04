@@ -136,14 +136,15 @@ if __name__ == "__main__":
     # print(word_list)
 
 
-    i = 8
+    i = 0
     opt = DocumentsOnMysql() #
     doucment_id_list, document_list = get_criminal_data(opt, criminal_list[i])
     content_list, result_list = seg_documentforword2vec(document_list)
     print(len(content_list))
-    save_seg_document(content_list, result_list, 'full_'+str(i)+'_')
+    save_seg_document(content_list, result_list, 'full_finance_'+str(i)+'_')
     opt.connClose()
 
+    #
 
     # content, result = content_resultforword2vec(myseg, opt.getById(11151)[5])
     # print(' '.join(content))
