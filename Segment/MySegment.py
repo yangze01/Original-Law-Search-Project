@@ -62,7 +62,7 @@ def stopword_remover(line):
     stop_words_from_file = set(stop_words_from_file)
     total_stop_words_set = stop_words_from_file
 
-    tokens = [w for w in line if not (w in total_stop_words_set or is_number(w) or ((not is_ascii(w)) and len(w) < 1))]
+    tokens = [w for w in line if not (w in total_stop_words_set or is_number(w) or ((not is_ascii(w)) and len(w) < 4))]
     # if len(tokens) > 3:
         # print(' '.join([t for t in tokens]), file=outFile)
     return tokens

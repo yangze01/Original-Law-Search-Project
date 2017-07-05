@@ -345,7 +345,7 @@ if __name__ == "__main__":
         sentence = raw_input()
         document_ret_dict = impl_sim(2, sentence)
         j = 1
-        for json_obj in document_ret_dict['result'][0:5]:
+        for json_obj in document_ret_dict['result'][0:15]:
             # print(json_obj['id'])
             # print(json_obj)
             print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
