@@ -81,15 +81,17 @@ myseg = MySegment()
 for key, value in save_dict.items():
     print(myseg.sen2word(value.encode('utf8')))
 
+
+
 opt_connect = OptOnMysql()
 for key ,value in save_dict.items():
-    # try:
-    print(key)
-    sql = "insert into rule (rule_id, rule_value) values('{0}', '{1}')".format(key, value)
-    # print(sql)
-    opt_connect.exeQuery(sql)
-    # except:
-    #     print("error")
+    try:
+        print(key)
+        sql = "insert into rule (rule_id, rule_value) values('{0}', '{1}')".format(key, value)
+        # print(sql)
+        opt_connect.exeQuery(sql)
+    except:
+        print("error")
 opt_connect.connClose()
 
 
