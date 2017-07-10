@@ -153,3 +153,4 @@ if __name__ == "__main__":
     print(len(content_list))
     save_seg_document(content_list, result_list, 'full_finance_' + str(i) + '_')
     opt.connClose()
+

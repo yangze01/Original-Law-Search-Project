@@ -28,3 +28,33 @@ create table document(
   criminal varchar(2000),
   keywords varchar(10000)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+create table doc2rule(
+  _id int unsigned not null primary key auto_increment,
+  doc_id int(11),
+  rule_id int(11)
+)ENGINE=InnoDB DEFAULT CHARSET = utf8;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

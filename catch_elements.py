@@ -220,14 +220,14 @@ def read_document(file_path):
         return_document.append((decode_line.decode('utf8'), newline))
         
     return return_document
-def get_abstract(content, document):
+def get_summary(content, document):
     if(content):
-        abstract = content[content.find('。') + 1:content.find('。', content.find('。') + 200) + 1]
+        summary = content[content.find('。') + 1:content.find('。', content.find('。') + 200) + 1]
     else:
-        abstract = document[document.find('。') + 1:document.find('。', document.find('。') + 200) + 1]
+        summary = document[document.find('。') + 1:document.find('。', document.find('。') + 200) + 1]
 
-    # abstract = content[0:content.find('。',content.find('。')+100)]
-    return abstract
+    # summary = content[0:content.find('。',content.find('。')+100)]
+    return summary
 
 
 
@@ -357,7 +357,7 @@ if __name__ == "__main__":
                                                         allowPOS=('ns', 'n', 'vn', 'v'))
             key_words = ',' + ','.join(key_word_tfidf) + ','
             save_dict['keywords'] = key_words  # varchar(10000)
-            save_dict['abstract'] = get_abstract(doc, document1) # varchar(2000)
+            save_dict['summary'] = get_summary(doc, document1) # varchar(2000)
 
             #裁判理由
             doc, count = get_behavior(document1)
@@ -411,7 +411,7 @@ if __name__ == "__main__":
 
     # insert
     # into
-    # document (appellee_detail, abstract, date, case_num, keywords, confession_of_defense, case_reason, appellee,
+    # document (appellee_detail, summary, date, case_num, keywords, confession_of_defense, case_reason, appellee,
     #          case_level, court, title, facts_and_evidence, content, details, prosecutor_detail, criminal, type,
     #          prosecutor, inquisition, recoder, advocate, judge, url, judge_reason, case_type, judgment_result,
     #          judgment_people, )

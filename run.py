@@ -2,7 +2,7 @@
 from flask import Flask, render_template
 from flask import request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 # from flask_socketio import SocketIO, emit, disconnect
-from RandomForest_word2vec import *
+from RandomForest_word2vec_backup import *
 app = Flask(__name__)
 app.secret_key = '!@#$%^&*()'
 app.config['SESSION_TYPE'] = 'filesystem'
