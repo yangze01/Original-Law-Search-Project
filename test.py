@@ -69,98 +69,104 @@ import json
 # sentence1 = u"解决"
 sentence2 = u"李某  拐卖妇女儿童 残疾  自首"
 # # sentence = None
-a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence1})
-b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence2})
-b = requests.post("http://0.0.0.0:5000/api_relation",data={'word':"交通"})
-b = requests.post("http://10.168.103.10:5000/test",data={'roomid':1653327,'flag':1})
-b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
-
-# # url = "http://0.0.0.0:5000/api_sim?search_type=" + str(1) + "&" + "sentence='%s'"%sentence
-# # # print(url)
+# a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence1})
+# b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence2})
+while True:
+    print("input: ")
+    x = raw_input().encode('utf8')
+    b = requests.post("http://0.0.0.0:5000/api_relation",data={'word':x})
+    print(json.loads(b.content)['key'])
+    for i in json.loads(b.content)['key']:
+        print(i)
+# b = requests.post("http://10.168.103.10:5000/test",data={'roomid':1653327,'flag':1})
+# b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
 #
-# b = requests.get(url)
-# print(b)
-# # print(a)
-# a_decode = json.loads(a.content)
-b_decode = json.loads(b.content)
-# # print(a_decode)
-# print(b_decode)
-# # print(a)
-print(' '.join(b_decode['key']))
-# print(b_decode['relation'])
-# # print(a_decode)/home/lenstr/PycharmProjects/rebuild_judgment
-opt_Document = DocumentsOnMysql()
-# while (True):
-#     print("请输入一句话或空格间隔的关键词，回车结束： ")
-#     print(sentence2)
-#     # sentence = raw_input()
-#     document_ret_dict = b_decode
-#     print(document_ret_dict['result'])
-#     j = 1
-#     for json_obj in document_ret_dict['result'][0:5]:
-#         # print(json_obj['id'])
-#         # print(json_obj)
-#         print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
-#         print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(
-#             json_obj['final_sim']))
-#         print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(
-#             json_obj['vec_sim']))
+# # # url = "http://0.0.0.0:5000/api_sim?search_type=" + str(1) + "&" + "sentence='%s'"%sentence
+# # # # print(url)
+# #
+# # b = requests.get(url)
+# # print(b)
+# # # print(a)
+# # a_decode = json.loads(a.content)
+# b_decode = json.loads(b.content)
+# # # print(a_decode)
+# # print(b_decode)
+# # # print(a)
+# print(' '.join(b_decode['key']))
+# # print(b_decode['relation'])
+# # # print(a_decode)/home/lenstr/PycharmProjects/rebuild_judgment
+# opt_Document = DocumentsOnMysql()
+# # while (True):
+# #     print("请输入一句话或空格间隔的关键词，回车结束： ")
+# #     print(sentence2)
+# #     # sentence = raw_input()
+# #     document_ret_dict = b_decode
+# #     print(document_ret_dict['result'])
+# #     j = 1
+# #     for json_obj in document_ret_dict['result'][0:5]:
+# #         # print(json_obj['id'])
+# #         # print(json_obj)
+# #         print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
+# #         print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(
+# #             json_obj['final_sim']))
+# #         print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(
+# #             json_obj['vec_sim']))
+# #
+# #         print("document id {}".format(json_obj['id']))
+# #         # print('\n'.join(document_list[document_tuple[0]].split('|')))
+# #         # print("~~~~~~~~~~~~~~~~~~/home/lenstr/PycharmProjects/rebuild_judgment~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+# #         print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
+# #         j += 1
+# #     break
 #
-#         print("document id {}".format(json_obj['id']))
-#         # print('\n'.join(document_list[document_tuple[0]].split('|')))
-#         # print("~~~~~~~~~~~~~~~~~~/home/lenstr/PycharmProjects/rebuild_judgment~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-#         print('\n'.join(opt_Document.getById(json_obj['id'])[5].split('|')))
-#         j += 1
-#     break
-
-# # for i in a_decode:
-# #     print(i)
-# # print(type(a_decode))
-# # # print(b_decode)
-# # # print(a_decode['out'])
-# import json
-# from collections import OrderedDict
-# # d = {str(i):i for i in range(10)}
-# # print(d)
-# # json_d = json.dumps(d,sort_values= True)
-# # print(json_d)
-# # d = OrderedDict(sorted(d.items(),key = lambda t:t[0]))
-# # e = {key:value for key,value in d.items()}
-# # print(d)
-
-# a = set()
-# a.add(1)
-# a.add(2)
-# a.add(3)
-# # if 1 in a:
+# # # for i in a_decode:
+# # #     print(i)
+# # # print(type(a_decode))
+# # # # print(b_decode)
+# # # # print(a_decode['out'])
+# # import json
+# # from collections import OrderedDict
+# # # d = {str(i):i for i in range(10)}
+# # # print(d)
+# # # json_d = json.dumps(d,sort_values= True)
+# # # print(json_d)
+# # # d = OrderedDict(sorted(d.items(),key = lambda t:t[0]))
+# # # e = {key:value for key,value in d.items()}
+# # # print(d)
+#
+# # a = set()
+# # a.add(1)
+# # a.add(2)
+# # a.add(3)
+# # # if 1 in a:
+# # #     print(True)
+# # # print(a)
+# num_dict = dict()
+# num_dict[1] = 'a'
+# num_dict[2] = 'b'
+# num_dict[3] = 'c'
+# #
+# # print(num_dict)
+# #
+# # if 4 in num_dict:
 # #     print(True)
+# # else:
+# #     print(False)
+# # print([1,2,3] + [4, 5, 6])
 # # print(a)
-num_dict = dict()
-num_dict[1] = 'a'
-num_dict[2] = 'b'
-num_dict[3] = 'c'
 #
-# print(num_dict)
+# # del num_dict[1]
+# # print(num_dict)
 #
-# if 4 in num_dict:
-#     print(True)
-# else:
-#     print(False)
-# print([1,2,3] + [4, 5, 6])
-# print(a)
-
-# del num_dict[1]
-# print(num_dict)
-
-# for key,value in num_dict.items():
-#     if(value == 'c'):
-#         del num_dict[key]
-
-# print(num_dict)
-from itertools import combinations,product
-import numpy as np
-a = [1,2,3]
-b = np.array(a)/3
-print(b)
+# # for key,value in num_dict.items():
+# #     if(value == 'c'):
+# #         del num_dict[key]
+#
+# # print(num_dict)
+# from itertools import combinations,product
+# import numpy as np
+# a = [1,2,3]
+# b = np.array(a)/3
+# print(b)
 
 

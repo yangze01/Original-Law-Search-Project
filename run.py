@@ -2,7 +2,7 @@
 from flask import Flask, render_template
 from flask import request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 # from flask_socketio import SocketIO, emit, disconnect
-from RandomForest_word2vec_backup import *
+from RandomForest_word2vec import *
 app = Flask(__name__)
 app.secret_key = '!@#$%^&*()'
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -31,13 +31,10 @@ def get_sim_dict():
 	print(sentence)
 
 	document_ret_dict = impl_sim(search_type, sentence)
-	return jsonify(document_ret_dict)#
+	return jsonify(document_ret_dict)
 
 if __name__ == '__main__':
 	print("begin flask service.")
 	# socketio.run(app, debug=True)
 	app.run(host='0.0.0.0')
-
-
-
 
