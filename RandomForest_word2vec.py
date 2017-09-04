@@ -4,6 +4,7 @@ import sys
 from pylab import *
 import matplotlib as mpl
 # from matplotlib.font_manager import *
+from data_helper import *
 import matplotlib.pyplot as plt
 myfont = mpl.font_manager.FontProperties(fname="/usr/share/fonts/truetype/wqy/wqy-microhei.ttc")
 mpl.rcParams['axes.unicode_minus'] = False
@@ -25,8 +26,7 @@ import datetime
 from sklearn.manifold import TSNE
 
 from sklearn.metrics import confusion_matrix
-reload(sys)
-sys.setdefaultencoding('utf8')
+
 from get_element import *
 # from word2vec import *
 from sklearn.preprocessing import Imputer
@@ -182,6 +182,7 @@ def sentence2vec(model, sentence, randomvec = None, vec_type = "average"):
         tmp_num = np.hstack((np.min(tmp_num, axis = 0), np.max(tmp_num, axis = 0)))
 
     return tmp_num
+
 
 
 def sentences2docvec(model, sentences, vec_type = "average"):
@@ -373,66 +374,66 @@ if __name__ == "__main__":
 
 
 
-    print("----------------------- 加载数据中，请等待..... -----------------------")
-    # [1]*1890 + [2]*1980 + [3]*1876 + [4]* 2004 + [5]*1927 + [6]*1214 + 260*[7]
-
-    opt_Document = DocumentsOnMysql()
-    # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
-    # np.savetxt(BasePath + "/data/document_index.txt", np.array(document_all_id_list))
-
-    # document_all_id_list = [int(i) for i in np.loadtxt(BasePath + "/data/document_index.txt")]
-    document_all_id_list = np.loadtxt(BasePath + "/data/document_full_finance_index.txt")
-    print("load document index finished, the length is : {}".format(len(document_all_id_list)))
-
-    # print(document_all_id_list)
-    # print(len(document_all_id_list))
-    # content_all_list, result_all_list = fetch_all_content_result(document_list)
-    # test_content = content_all_list[-1]
-    # use_content = content_all_list # [:-1]
-
-
-    x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_full_finance_average.txt")
-    print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_full_finance_average.txt"))
-
-    # 随机森林训练
-    clf_filepath = BasePath + "/data/clf_model_full_finance_average.m"
-    if os.path.exists(clf_filepath):
-        print("the model already exists in :{}".format(clf_filepath))
-        clf = joblib.load(clf_filepath)
-    else:
-        print("No model loaded!")
-
-    myseg = MySegment()
-    # w2v_model = load_model()
-    # opt_sql = DocumentsOnMysql()
-
-    print("请输入查询方式，整句查询请按1，关键词查询请按2： ")
-    i = input()
-    while True:
-        if(i == 1):
-            print("请输入一句话，回车结束： ")
-            sentence = raw_input()
-            seg_sentence = myseg.sen2word(sentence)
-            document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
-        else:
-            print("请输入关键词，以空格隔开，回车结束")
-            seg_sentence = raw_input()
-            seg_sentence = seg_sentence.encode('utf8').split(' ')
-            document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
-        j = 1
-
-
-        for key in document_ret_tuple.keys():
-            print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
-            print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(document_ret_tuple[key]['clf_sim']))
-            print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(document_ret_tuple[key]['vec_sim']))
-
-            print(key)
-            # print('\n'.join(document_list[document_tuple[0]].split('|')))
-            # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-            print('\n'.join(opt_Document.getById(key)[5].split('|')))
-            j += 1
-    myseg.close()
+    # print("----------------------- 加载数据中，请等待..... -----------------------")
+    # # [1]*1890 + [2]*1980 + [3]*1876 + [4]* 2004 + [5]*1927 + [6]*1214 + 260*[7]
+    #
+    # opt_Document = DocumentsOnMysql()
+    # # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
+    # # np.savetxt(BasePath + "/data/document_index.txt", np.array(document_all_id_list))
+    #
+    # # document_all_id_list = [int(i) for i in np.loadtxt(BasePath + "/data/document_index.txt")]
+    # document_all_id_list = np.loadtxt(BasePath + "/data/document_full_finance_index.txt")
+    # print("load document index finished, the length is : {}".format(len(document_all_id_list)))
+    #
+    # # print(document_all_id_list)
+    # # print(len(document_all_id_list))
+    # # content_all_list, result_all_list = fetch_all_content_result(document_list)
+    # # test_content = content_all_list[-1]
+    # # use_content = content_all_list # [:-1]
+    #
+    #
+    # x_sample = np.loadtxt(BasePath + "/word2vec_model/corpus_w2v_full_finance_average.txt")
+    # print("load the corpus vector in : {}".format(BasePath + "/word2vec_model/corpus_w2v_full_finance_average.txt"))
+    #
+    # # 随机森林训练
+    # clf_filepath = BasePath + "/data/clf_model_full_finance_average.m"
+    # if os.path.exists(clf_filepath):
+    #     print("the model already exists in :{}".format(clf_filepath))
+    #     clf = joblib.load(clf_filepath)
+    # else:
+    #     print("No model loaded!")
+    #
+    # myseg = MySegment()
+    # # w2v_model = load_model()
+    # # opt_sql = DocumentsOnMysql()
+    #
+    # print("请输入查询方式，整句查询请按1，关键词查询请按2： ")
+    # i = input()
+    # while True:
+    #     if(i == 1):
+    #         print("请输入一句话，回车结束： ")
+    #         sentence = raw_input()
+    #         seg_sentence = myseg.sen2word(sentence)
+    #         document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
+    #     else:
+    #         print("请输入关键词，以空格隔开，回车结束")
+    #         seg_sentence = raw_input()
+    #         seg_sentence = seg_sentence.encode('utf8').split(' ')
+    #         document_ret_tuple = get_sim_sentence(clf, seg_sentence, x_sample)
+    #     j = 1
+    #
+    #
+    #     for key in document_ret_tuple.keys():
+    #         print("----------------------- 第" + str(j) + "名匹配文档： -----------------------")
+    #         print("----------------------- 第" + str(j) + "名匹配文档的clf相似度: {}------------------------------------".format(document_ret_tuple[key]['clf_sim']))
+    #         print("----------------------- 第" + str(j) + "名匹配文档的vec相似度: {}------------------------------------".format(document_ret_tuple[key]['vec_sim']))
+    #
+    #         print(key)
+    #         # print('\n'.join(document_list[document_tuple[0]].split('|')))
+    #         # print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    #         print('\n'.join(opt_Document.getById(key)[5].split('|')))
+    #         j += 1
+    # myseg.close()
 
 
 
@@ -475,8 +476,8 @@ if __name__ == "__main__":
     # opt_Document = DocumentsOnMysql()
     # document_all_id_list, document_list = get_criminal_list_data(opt_Document, criminal_list)
     # np.savetxt(BasePath + "/data/document_full_finance_index.txt", np.array(document_all_id_list))
-    # #
-    #
+
+
     # num_topics = 100
     # dev_sample_percentage = .3
     # filepath_list = [BasePath + "/data/judgment" +"full_finance_" +str(i)+ "_" + ".txt" for i in range(0,8)]

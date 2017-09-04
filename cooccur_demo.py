@@ -1,6 +1,8 @@
 #coding=utf8
 import csv
 import sys
+import random
+from random import choice
 # reload(sys)
 # sys.setdefaultencoding('utf8')
 BasePath = sys.path[0]
@@ -53,27 +55,54 @@ def search(id,number_list):
     return sorted_result_list
 
 if __name__ == "__main__":
-    dict_filepath = BasePath + "/csv_dict.csv"
-    tuple_filepath = BasePath + "/csv_tuple.csv"
+    dict_filepath = BasePath + "/csv_dict_pos_select.csv"
+    tuple_filepath = BasePath + "/csv_tuple_pos_select.csv"
     vocab = Vocab(dict_filepath)
     number_list = map_word(tuple_filepath)
-
+    word_list = vocab._word_to_id.keys()
+    slice = random.sample(word_list, 100)
+    id = 1
     while True:
         try:
             x = raw_input("请输入检索词: ")
+            # for x in slice:
+            print("第{0}个检索词：{1}".format(id, x))
+            id += 1
             search_key = vocab.word2id(x)
             sorted_result_list = search(search_key, number_list)
             if(len(sorted_result_list) > 5):
                 for i in sorted_result_list[0:5]:
                     # print(i)
-                    print("id:{0}, count:{1}, relation:{2}".format(vocab.id2word(i[0]), i[1], i[2]))
+                    print("word:{0}, count:{1}, relation:{2}".format(vocab.id2word(i[0]), i[1], i[2]))
             else:
                 for i in sorted_result_list:
                     # print(i)
-                    print("id:{0}, count:{1}, relation:{2}".format(vocab.id2word(i[0]), i[1], i[2]))
+                    print("word:{0}, count:{1}, relation:{2}".format(vocab.id2word(i[0]), i[1], i[2]))
 
         except:
             print("字典中不存在该词！")
-            continue
+            # continue
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

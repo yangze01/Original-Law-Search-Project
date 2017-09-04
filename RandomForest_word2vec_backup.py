@@ -450,7 +450,7 @@ if __name__ == "__main__":
 
 
 
-
+    #
     # #
     # # criminal_list = ['交通肇事罪',  # 危险驾驶罪（危险 驾驶罪）
     # #                  '过失致人死亡罪',  # 故意杀人罪（故意 杀人 杀人罪） 故意伤害罪（故意 伤害 伤害罪）
@@ -530,10 +530,11 @@ if __name__ == "__main__":
     # plt.figure()
     # plot_confusion_matrix(cm_normalized, title = 'Normalized confusion matrix')
     # plt.show()
+
     # 保存
     # dot -Tpng my.dot -o my.png
     # 1、输出
-
+    #
     # with open('iris.dot', 'w') as f:
     #     tree.export_graphviz(model, out_file=f)
     # # 2、给定文件名

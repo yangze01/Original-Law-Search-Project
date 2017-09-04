@@ -107,5 +107,24 @@
 #     print s.sentence,s.weight
 # print
 
-for i in range(1,10):
-    print(i)
+#coding=utf8
+import sys
+reload(sys)
+import requests
+import json
+sys.setdefaultencoding('utf8')
+BasePath = sys.path[0]
+
+if __name__ == "__main__":
+    print("please input the data: ")
+    x = raw_input()
+    # http: // 10.168.103.101:8000 / document_solr / document / list.controller?queryString = % E8 % AF % 88 % E9 % AA % 97
+    a = requests.post("http://10.168.103.101:8000/document_solr/document/list.controller",data={'queryString':x})
+    print(a)
+    decode_json = json.loads(a.content)
+    id_list = decode_json['ids']
+    score_list = decode_json['scores']
+    print("~~~~~~~~~~~~~~~~~~~")
+    # print(id_list[0:10])
+    # print(id_list[0:10] - 1)
+

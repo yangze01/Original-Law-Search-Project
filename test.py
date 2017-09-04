@@ -1,9 +1,10 @@
 #coding=utf8
 from __future__ import division
-# import numpy as np
+import numpy as np
 # import heapq
 # import tensorflow as tf
-
+import sys
+BasePath = sys.path[0]
 
 
 
@@ -71,13 +72,15 @@ sentence2 = u"李某  拐卖妇女儿童 残疾  自首"
 # # sentence = None
 # a = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence1})
 # b = requests.post("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence2})
-while True:
-    print("input: ")
-    x = raw_input().encode('utf8')
-    b = requests.post("http://0.0.0.0:5000/api_relation",data={'word':x})
-    print(json.loads(b.content)['key'])
-    for i in json.loads(b.content)['key']:
-        print(i)
+
+# while True:
+#     print("input: ")
+#     x = raw_input().encode('utf8')
+#     b = requests.post("http://0.0.0.0:5000/api_relation",data={'word':x})
+#     print(json.loads(b.content)['key'])
+#     for i in json.loads(b.content)['key']:
+#         print(i)
+
 # b = requests.post("http://10.168.103.10:5000/test",data={'roomid':1653327,'flag':1})
 # b = requests.get("http://0.0.0.0:5000/api_sim",data={'search_type':1,'sentence':sentence})
 #
@@ -169,4 +172,11 @@ while True:
 # b = np.array(a)/3
 # print(b)
 
-
+document_all_id_list = np.loadtxt(BasePath + "/data/document_full_finance_index.txt")# 40000 + 8000条数据版本
+print("the len of the document : is {}".format(len(document_all_id_list)))
+# keys = range(0, len(document_all_id_list))
+# a = np.array([1,2,3,4,5])
+# full_index = [1, 2, 3]
+# a = dict(zip(keys, document_all_id_list))
+print(sorted(document_all_id_list))
+# a.index([1,2,3])
